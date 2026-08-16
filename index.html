@@ -1,0 +1,2935 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.A. SRL - Ingegneria & Condomini</title>
+
+    <!-- Importazione di Three.js per il 3D reale -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Importazione SDK EmailJS (Versione aggiornata) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">(function() {
+            emailjs.init("dcz2XTxU4_Yy1PZbb");
+        })();
+    </script>
+    
+    <!-- SEO Meta Description -->
+    <meta name="description" content="F.A. SRL unisce esperienza in amministrazioni condominiali e servizi di ingegneria a Monza. Dalla gestione contabile alla progettazione e direzione lavori. Richiedi un preventivo!">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "F.A. SRL - Ingegneria & Condomini",
+      "description": "Due competenze, un'unica visione: la cura quotidiana della gestione condominiale e la precisione tecnica dell'ingegneria. Gestione completa, contabilità, progettazione civile e industriale, direzione lavori e APE.",
+      "image": "img/logoblu.png",
+      "telephone": "+390399998459",
+      "email": "amministrazione@fasrl.net",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Via Carlo Rota, 12",
+        "addressLocality": "Monza",
+        "addressRegion": "MB",
+        "postalCode": "20900",
+        "addressCountry": "IT"
+      },
+      "founder": [
+        {
+          "@type": "Person",
+          "name": "Flavio Attanasio",
+          "jobTitle": "Amministratore"
+        },
+        {
+          "@type": "Person",
+          "name": "Salvatore Attanasio",
+          "jobTitle": "Ingegnere"
+        }
+      ],
+      "foundingDate": "2026",
+      "vatID": "14732610960",
+      "areaServed": "Lombardia",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Servizi F.A. SRL",
+        "itemListElement": [
+          {
+            "@type": "OfferCatalog",
+            "name": "Amministrazioni Condominiali",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gestione completa del condominio" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Contabilità e rendiconti" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pratiche assicurative" } }
+            ]
+          },
+          {
+            "@type": "OfferCatalog",
+            "name": "Servizi di Ingegneria",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Progettazione civile e industriale" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Direzione Lavori e Coordinamento Sicurezza" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Certificazioni energetiche (APE) e pratiche catastali" } }
+            ]
+          }
+        ]
+      }
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1417ce; 
+            color: #ffffff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Classe per bloccare lo scroll del body quando la modale è aperta */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Header fisso con logo immagine ingrandito x3 al centro */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 140px;
+            padding: 0 80px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo-inline {
+            height: clamp(100px, 6vw + 78px, 165px);
+            width: auto;
+            object-fit: contain;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Pulsante Menu, stile coerente col resto del sito */
+        .menu-btn {
+            position: fixed;
+            right: 100px;
+            top: 100px;
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.6s ease, background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+            color: #ffffff;
+            z-index: 110;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+        }
+
+        .menu-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: #ffffff;
+            transition: transform 0.3s ease, stroke 0.3s ease;
+        }
+
+        .menu-btn:hover svg {
+            transform: rotate(90deg);
+        }
+
+        /* Stile quando il pulsante si trova sulle sezioni bianche (grigino) */
+        .menu-btn.on-white {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.2);
+            color: #333333;
+        }
+
+        .menu-btn.on-white svg {
+            stroke: #333333;
+        }
+
+        .menu-btn.on-white:hover {
+            background: rgba(0, 0, 0, 0.12);
+            border-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .menu-btn.is-open {
+            background: rgba(12, 27, 51, 0.1) !important; 
+            border-color: #0c1b33 !important;
+        }
+
+        .menu-btn.is-open svg {
+            stroke: #0c1b33 !important;
+            transform: rotate(0deg);
+        }
+
+        .menu-btn.is-open:hover {
+            background: rgba(12, 27, 51, 0.2) !important;
+        }
+
+        /* =========================================
+           MENU FULLSCREEN & ANIMAZIONI SFONDO
+        ========================================= */
+        .fullscreen-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 105; 
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .fullscreen-menu.open {
+            pointer-events: auto;
+        }
+
+        /* Sfondo principale a bolla bianca con clip-path per eliminare qualsiasi stacco laterale */
+        .menu-wave-bg {
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            z-index: 2;
+            clip-path: circle(0px at calc(100vw - 123px) 123px);
+            transition: clip-path 0.85s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .fullscreen-menu.open .menu-wave-bg {
+            clip-path: circle(150% at calc(100vw - 123px) 123px);
+        }
+
+        /* Strato di vignettatura fissa in blu scuro (#0c2049) post-animazione */
+        .menu-vignette-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 35%, rgba(12, 32, 73, 0.35) 80%, rgba(12, 32, 73, 0.7) 100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease 0.4s, visibility 0s linear 0.8s;
+            z-index: 3;
+        }
+
+        .fullscreen-menu.open .menu-vignette-overlay {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.4s ease 0.4s, visibility 0s;
+        }
+
+        .close-menu-btn {
+            position: absolute;
+            top: 100px;
+            right: 110px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #0c1b33;
+            z-index: 110;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(-20px);
+        }
+
+        .fullscreen-menu.open .close-menu-btn {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+
+        .close-menu-btn svg {
+            width: 36px;
+            height: 36px;
+            stroke: #0c1b33;
+            transition: transform 0.3s ease;
+        }
+
+        .close-menu-btn:hover svg {
+            transform: rotate(90deg);
+        }
+
+        .menu-content {
+            position: relative;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+        }
+
+        .fullscreen-menu.open .menu-content {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease 0.4s, visibility 0s;
+        }
+
+        .menu-logo {
+            height: 150px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 60px;
+        }
+
+        .menu-links {
+            list-style: none;
+            text-align: center;
+            padding: 0;
+        }
+
+        .menu-links li {
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .menu-link {
+            position: relative;
+            display: inline-block;
+            font-size: clamp(24px, 3.5vw, 48px);
+            font-weight: 900;
+            color: #0c2049;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 2px 10px;
+            transform: translateY(110%);
+            /* Dissolvenza veloce quando il mouse esce (fade-out rapido 0.03s) */
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.03s ease-out;
+        }
+
+        /* Linea d'accento sfumata sotto il testo all'hover */
+        .menu-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #1417ce 0%, #0c2049 100%);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .menu-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .fullscreen-menu.open .menu-link {
+            transform: translateY(0);
+        }
+        .fullscreen-menu.open .menu-links li:nth-child(1) .menu-link { transition-delay: 0.4s; }
+        .fullscreen-menu.open .menu-links li:nth-child(2) .menu-link { transition-delay: 0.48s; }
+        .fullscreen-menu.open .menu-links li:nth-child(3) .menu-link { transition-delay: 0.56s; }
+        .fullscreen-menu.open .menu-links li:nth-child(4) .menu-link { transition-delay: 0.64s; }
+
+        .menu-link:hover {
+            color: #1417ce;
+            /* Transizione colore rapida (0.15s) con minimo ritardo (0.05s) rispetto all'avvio della linea */
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s ease-in-out 0.05s;
+        }
+
+        section {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 80px;
+        }
+
+        #home {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-title-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .hero-svg-title {
+            width: 980px;
+            max-width: 96vw;
+            height: auto;
+            overflow: visible;
+        }
+
+        #chi-siamo {
+            justify-content: space-between;
+            height: 115vh;
+        }
+
+        .about-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .about-content h2 {
+            font-size: clamp(20px, 2.6vw, 40px);
+            font-weight: 800;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .about-content h2 span {
+            font-style: italic;
+        }
+
+        .chi-siamo-tags {
+            display: flex;
+            gap: 14px;
+            margin-top: 34px;
+            flex-wrap: wrap;
+        }
+
+        .chi-siamo-tags .tag {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            border-radius: 30px;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(8px);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .chi-siamo-tags .tag:hover {
+            border-color: #ffffff;
+            background: rgba(255,255,255,0.14);
+        }
+
+        .chi-siamo-tags .tag svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .chi-siamo-tags.visible .tag:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
+        .chi-siamo-tags.visible .tag:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.22s; }
+
+        /* =========================================
+           SEZIONE SERVIZI — INTRO
+        ========================================= */
+        .servizi-intro {
+            position: relative;
+            width: 100vw;
+            height: auto;
+            min-height: unset;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #ffffff;
+            color: #0b1120;
+            padding: 120px 40px 0px;
+            margin-top: 150px;
+            z-index: 9;
+            overflow: hidden;
+        }
+
+        .servizi-intro .subtitle {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #888888;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .servizi-intro h2 {
+            font-size: clamp(34px, 5vw, 64px);
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            line-height: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+        }
+
+        .servizi-intro p {
+            margin-top: 12px;
+            max-width: 520px;
+            font-size: clamp(14px, 1.1vw, 16px);
+            line-height: 1.5;
+            color: #555555;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.22s;
+        }
+
+        .servizi-intro.visible .subtitle,
+        .servizi-intro.visible h2,
+        .servizi-intro.visible p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           SEZIONE SERVIZI — SCROLLYTELLING PALAZZO PNG & LISTE
+        ========================================= */
+        .servizi-3d {
+            position: relative;
+            width: 100vw;
+            height: 220vh;
+            background-color: #ffffff;
+            z-index: 8;
+        }
+
+        .servizi-3d-sticky {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: visible;
+        }
+
+        /* Container Grattacielo PNG */
+        .building-png-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Binario verticale del grattacielo modificato con ancoraggio spostato più in alto */
+        .building-scroll-track {
+            position: absolute;
+            top: -75%;
+            left: 50%;
+            height: 220vh;
+            width: auto;
+            transform: translate(-50%, 0%);
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Immagine singola di palazzo / grattacielo PNG */
+        .skyscraper-img {
+            height: 75%;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 25px 35px rgba(12, 27, 51, 0.18));
+        }
+
+        /* Ambientazione Fondamenta / Base palazzo bloccata in fondo alla sezione servizi con ombra di transizione più evidente */
+        .building-ground-env {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            z-index: 5;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center bottom, rgba(11, 17, 32, 0.34) 0%, rgba(11, 17, 32, 0.14) 55%, rgba(255, 255, 255, 0) 85%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .ground-shadow {
+            width: 480px;
+            max-width: 80vw;
+            height: 22px;
+            background: radial-gradient(ellipse at center, rgba(11, 17, 32, 0.55) 0%, rgba(11, 17, 32, 0) 70%);
+            border-radius: 50%;
+            margin-bottom: 0px;
+            transform: scaleY(0.5) translateY(20px);
+        }
+
+        .ground-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(20,23,206,0) 0%, rgba(20,23,206,0.2) 20%, rgba(20,23,206,0.3) 50%, rgba(20,23,206,0.2) 80%, rgba(20,23,206,0) 100%);
+        }
+
+        .servizi-columns {
+            position: relative;
+            z-index: 4;
+            width: 100%;
+            max-width: 1560px;
+            margin: -4vh auto 0;
+            height: 80vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 60px 60px 0;
+            pointer-events: none;
+        }
+
+        .servizi-col {
+            flex: 0 0 340px;
+            pointer-events: auto;
+            will-change: opacity;
+            transition: opacity 0.5s ease;
+        }
+
+        .servizi-col-left { 
+            text-align: right; 
+            opacity: 0;
+            transform: translateX(-70px);
+        }
+        
+        .servizi-col-right { 
+            text-align: left; 
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        .servizi-col-header .subtitle {
+            display: block;
+            font-size: 12px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: #555555;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .servizi-col-header h3 {
+            font-size: clamp(24px, 2.5vw, 38px);
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #0b1120;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .servizi-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .servizi-col-left .servizi-list { align-items: flex-end; }
+        .servizi-col-right .servizi-list { align-items: flex-start; }
+
+        .servizi-list li {
+            font-size: clamp(14px, 1vw, 17px);
+            font-weight: 700;
+            color: #0b1120;
+            line-height: 1.4;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .servizi-col-left .servizi-list li { padding-right: 26px; }
+        .servizi-col-right .servizi-list li { padding-left: 26px; }
+
+        .servizi-list li::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            width: 14px;
+            height: 2px;
+            background: #1417ce;
+        }
+
+        .servizi-col-left .servizi-list li::before { right: 0; }
+        .servizi-col-right .servizi-list li::before { left: 0; }
+
+        .servizi-list li.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Pulsanti Preventivo nei Servizi */
+        .btn-preventivo {
+            display: inline-block;
+            padding: 12px 26px;
+            background: #1417ce;
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateY(30px);
+            pointer-events: none;
+        }
+
+        .btn-preventivo.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .btn-preventivo:hover {
+            background: #0c1b33;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 992px) {
+            .servizi-intro {
+                padding: 40px 24px 20px;
+            }
+            .servizi-3d {
+                height: 320vh;
+            }
+            .building-scroll-track {
+                opacity: 0.35;
+            }
+            .servizi-columns {
+                flex-direction: column;
+                justify-content: center;
+                gap: 0;
+                padding: 0 24px;
+                height: 100vh;
+            }
+            .servizi-col {
+                position: absolute;
+                width: 100%;
+                max-width: 440px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .servizi-col-left, .servizi-col-right {
+                text-align: center;
+            }
+            .servizi-col-left .servizi-list, .servizi-col-right .servizi-list {
+                align-items: center;
+            }
+            .servizi-list li {
+                max-width: 100%;
+                padding: 0 !important;
+            }
+            .servizi-list li::before {
+                display: none;
+            }
+        }
+
+        .hero-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(12,27,51,0) 25%, #081222 92%);
+            transition: opacity 0.4s ease;
+        }
+
+        #webgl-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .sheets-corner {
+            position: fixed;
+            top: 0;
+            height: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .sheets-corner--left { left: 0px; top: 0px; }
+        .sheets-corner--right { right: 0px; top: 0px; }
+
+        .sheet {
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 212px;
+            border-radius: 2px;
+            overflow: hidden;
+            box-shadow: 0 35px 50px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);
+            will-change: transform;
+            background-color: #fbfaf6;
+        }
+
+        .sheet::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 45%, rgba(0,0,0,0.15) 100%);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+
+        .sheet canvas { width: 100%; height: 100%; display: block; }
+
+        .pencil-deco {
+            position: absolute;
+            top: 0;
+            z-index: 5;
+            filter: drop-shadow(0 14px 16px rgba(0,0,0,0.45));
+            will-change: transform;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            right: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            z-index: 100;
+            opacity: 1;
+            transition: opacity 0.7s ease, color 0.3s ease;
+            pointer-events: none;
+            color: #ffffff;
+        }
+
+        .scroll-line-track {
+            position: relative;
+            width: 1px;
+            height: 34px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.22);
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .scroll-line-dot {
+            position: absolute;
+            left: -1.5px;
+            top: 0;
+            width: 4px;
+            height: 10px;
+            border-radius: 2px;
+            background: #ffffff;
+            animation: scrollLineMove 1.7s ease-in-out infinite;
+            transition: background 0.3s ease;
+        }
+
+        /* Stile quando l'indicatore scorri si trova sulle sezioni bianche (grigino) */
+        .scroll-indicator.on-white {
+            color: #333333;
+        }
+
+        .scroll-indicator.on-white .scroll-line-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .scroll-indicator.on-white .scroll-line-dot {
+            background: #333333;
+        }
+
+        /* Classe per nascondere completamente lo scorri */
+        .scroll-indicator.hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 0.4s ease;
+        }
+
+        @keyframes scrollLineMove {
+            0%   { transform: translateY(-10px); opacity: 0; }
+            18%  { opacity: 1; }
+            75%  { opacity: 1; }
+            100% { transform: translateY(34px); opacity: 0; }
+        }
+
+        /* =========================================
+           SEZIONE FOOTER / CONTATTI
+        ========================================= */
+        .footer-section {
+            position: relative;
+            width: 100vw;
+            min-height: 150vh;
+            background-color: #0c2049;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 180px 80px 80px;
+            overflow: hidden;
+            z-index: 9;
+        }
+
+        .footer-watermark {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 85vh;
+            width: auto;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+            object-fit: contain;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        .footer-left {
+            flex: 1 1 350px;
+        }
+
+        .footer-left h2 {
+            font-size: clamp(38px, 5vw, 75px);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .footer-left .footer-subtitle {
+            font-size: clamp(15px, 1.3vw, 19px);
+            font-weight: 500;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 420px;
+            margin-bottom: 35px;
+        }
+
+        .footer-left-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .footer-left a {
+            font-size: clamp(16px, 1.8vw, 26px);
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 2px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-left a:hover {
+            opacity: 0.7;
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 50px;
+            margin-top: 15px;
+            flex: 1.4 1 500px;
+            justify-content: flex-end;
+        }
+
+        .footer-info-block {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .footer-info-block h4 {
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            color: #a0aabf;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .footer-info-block p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .footer-info-block a {
+            color: #e2e8f0;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+            transition: border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .footer-info-block a:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            color: #8892a3;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            max-width: 1650px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-bottom a {
+            color: #8892a3;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(136, 146, 163, 0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        /* =========================================
+           BANNER COOKIE
+        ========================================= */
+        .cookie-banner {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 3000;
+            background: #0c2049;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35);
+            padding: 24px 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .cookie-banner.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .cookie-banner-text {
+            flex: 1 1 420px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .cookie-banner-text a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .cookie-banner-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            flex: 0 0 auto;
+        }
+
+        .cookie-btn {
+            padding: 12px 26px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            background: transparent;
+            color: #ffffff;
+            transition: background 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+        }
+
+        .cookie-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #ffffff;
+        }
+
+        .cookie-btn.cookie-btn-accept {
+            background: #ffffff;
+            color: #0c2049;
+            border-color: #ffffff;
+        }
+
+        .cookie-btn.cookie-btn-accept:hover {
+            opacity: 0.85;
+        }
+
+        @media (max-width: 700px) {
+            .cookie-banner {
+                padding: 16px 20px;
+                gap: 12px;
+                align-items: center;
+            }
+            .cookie-banner-text {
+                font-size: 12.5px;
+                line-height: 1.45;
+                flex-basis: 100%;
+            }
+            .cookie-banner-actions {
+                width: 100%;
+                gap: 10px;
+            }
+            .cookie-btn {
+                flex: 1;
+                padding: 10px 16px;
+                font-size: 12px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .footer-right {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .footer-section {
+                height: auto;
+                min-height: 100vh;
+                padding: 120px 30px 40px;
+                overflow: visible;
+            }
+            .footer-watermark {
+                display: none;
+            }
+            .footer-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            .footer-right {
+                position: relative;
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+                padding-top: 150px;
+            }
+            .footer-right::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 160px;
+                height: 130px;
+                background-image: url('img/logobianco.png');
+                background-repeat: no-repeat;
+                background-position: center top;
+                background-size: contain;
+                opacity: 0.9;
+            }
+            .footer-info-block {
+                padding: 18px 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.12);
+            }
+            .footer-info-block:first-child {
+                border-top: none;
+                padding-top: 0;
+            }
+            .footer-info-block:last-child {
+                padding-bottom: 0;
+            }
+            .footer-bottom {
+                margin-top: 60px;
+            }
+        }
+
+        /* =========================================
+           STILE MODALE PREVENTIVO
+        ========================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(12, 27, 51, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            color: #0b1120;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(30px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 32px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #0b1120;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #1417ce;
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        /* Schermata di conferma invio riuscito / errore, al posto dell'alert nativo */
+        .modal-feedback {
+            display: none;
+            text-align: center;
+            padding: 30px 10px 10px 10px;
+            animation: feedbackIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes feedbackIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .feedback-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px auto;
+            font-size: 34px;
+            font-weight: 900;
+        }
+
+        .feedback-icon.success-icon {
+            background: rgba(20, 23, 206, 0.08);
+            color: #1417ce;
+            border: 2px solid #1417ce;
+        }
+
+        .feedback-icon.error-icon {
+            background: rgba(214, 40, 40, 0.08);
+            color: #d62828;
+            border: 2px solid #d62828;
+        }
+
+        .modal-feedback h2 {
+            text-align: center;
+        }
+
+        .modal-feedback p {
+            color: #4a5568;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .form-section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #1417ce;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 10px 0;
+            border-bottom: 2px solid #f0f3f8;
+            padding-bottom: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #555555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d0d7e0;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 15px;
+            color: #0b1120;
+            background: #f8fafc;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #1417ce;
+            background: #ffffff;
+        }
+
+        /* Stili per la lista file selezionati con pulsante di rimozione */
+        /* Pulsante "Scegli file" elegante, coerente con lo stile del sito */
+        .form-group input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 4px 0;
+            margin-top: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            color: #4a5568;
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]::file-selector-button,
+        .form-group input[type="file"]::-webkit-file-upload-button {
+            background: #1417ce;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            margin-right: 14px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-group input[type="file"]:hover::file-selector-button,
+        .form-group input[type="file"]:hover::-webkit-file-upload-button {
+            background: #0f11a3;
+            transform: translateY(-1px);
+        }
+
+        .file-list-container {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #0b1120;
+            border: 1px solid #e2e8f0;
+        }
+
+        .file-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 380px;
+            font-weight: 500;
+        }
+
+        .file-remove-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 0 4px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .file-remove-btn:hover {
+            color: #b91c1c;
+        }
+
+        /* Avviso limite superato file */
+        .file-warning-msg {
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 8px;
+            display: none;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .form-group-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .form-group-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #1417ce;
+            cursor: pointer;
+        }
+
+        .form-group-checkbox label {
+            font-size: 13px;
+            color: #555555;
+            line-height: 1.4;
+            text-transform: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .form-group-checkbox label a {
+            color: #1417ce;
+            text-decoration: underline;
+            font-weight: 700;
+        }
+
+        .form-group-checkbox label a:hover {
+            color: #0c2049;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: #1417ce;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #0c1b33;
+            transform: translateY(-2px);
+        }
+
+        /* =========================================================
+           VERSIONE MOBILE
+           Regole aggiuntive, valide solo sotto i 768px: non toccano
+           né sovrascrivono nessuna regola desktop qui sopra, si
+           limitano ad adattare dimensioni/posizioni per schermi piccoli
+           restando il più vicino possibile al layout desktop.
+        ========================================================= */
+        @media (max-width: 768px) {
+
+            /* --- Header / Menu --- */
+            header {
+                height: 90px;
+                padding: 0 20px;
+            }
+
+            .logo-inline {
+                margin-bottom: 0;
+            }
+
+            .menu-btn {
+                top: 22px;
+                right: 20px;
+                width: 42px;
+                height: 42px;
+            }
+
+            .menu-btn svg {
+                width: 19px;
+                height: 19px;
+            }
+
+            .close-menu-btn {
+                top: 22px;
+                right: 24px;
+            }
+
+            .close-menu-btn svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .menu-logo {
+                height: 90px;
+                margin-bottom: 34px;
+            }
+
+            .scroll-indicator {
+                right: 20px;
+                bottom: 20px;
+                font-size: 10px;
+            }
+
+            /* --- Layout generale sezioni --- */
+            section {
+                padding: 0 22px;
+            }
+
+            .hero-title-wrap {
+                margin-top: 0;
+            }
+
+            /* Decorazioni fogli/matita/compasso: rimpicciolite per non invadere il testo */
+            .sheets-corner--left,
+            .sheets-corner--right {
+                transform: scale(0.5);
+            }
+
+            .sheets-corner--left { transform-origin: top left; }
+            .sheets-corner--right { transform-origin: top right; }
+
+            /* --- Chi Siamo --- */
+            #chi-siamo {
+                height: auto;
+                min-height: 100vh;
+                padding: 140px 22px 60px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .about-content {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .chi-siamo-tags {
+                justify-content: center;
+            }
+
+            /* --- Servizi: intro --- */
+            .servizi-intro {
+                margin-top: 100px;
+                padding: 90px 22px 0;
+            }
+
+            /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
+               Restano una sopra l'altra al centro (come già previsto dalla
+               regola a 992px), qui affiniamo solo le misure per schermi
+               stretti. L'alternanza "una branca alla volta" è gestita
+               dallo script più sotto. */
+            .servizi-columns {
+                padding: 0 18px;
+            }
+
+            .servizi-col {
+                max-width: 100%;
+            }
+
+            .servizi-col-header h3 {
+                font-size: 24px;
+            }
+
+            /* --- Contatti / Footer --- */
+            .footer-section {
+                padding: 110px 22px 40px;
+            }
+
+            /* --- Modale preventivo --- */
+            .modal-content {
+                width: 92%;
+                padding: 28px 20px;
+            }
+
+            .file-name {
+                max-width: 200px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .hero-svg-title {
+                width: 100%;
+            }
+
+            .servizi-col-header h3 {
+                font-size: 21px;
+            }
+
+            .footer-left h2 {
+                font-size: 32px;
+            }
+
+            .btn-preventivo {
+                padding: 11px 22px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BANNER COOKIE -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-banner-text">
+            Utilizziamo cookie tecnici necessari al funzionamento del sito. Per maggiori informazioni consulta la nostra <a href="privacy.html" target="_blank" rel="noopener noreferrer">Informativa sulla Privacy</a>.
+        </div>
+        <div class="cookie-banner-actions">
+            <button type="button" class="cookie-btn cookie-btn-reject" onclick="handleCookieChoice('rejected')">Rifiuta</button>
+            <button type="button" class="cookie-btn cookie-btn-accept" onclick="handleCookieChoice('accepted')">Accetta</button>
+        </div>
+    </div>
+
+    <svg width="0" height="0" style="position:absolute; width:0; height:0; pointer-events:none;">
+        <defs>
+            <filter id="flapLighting" x="-20%" y="-20%" width="140%" height="140%">
+                <feFlood flood-color="#A6A6A6" result="greyFlood"/>
+                <feComposite operator="in" in="greyFlood" in2="SourceAlpha" result="greyShape"/>
+                
+                <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/>
+                <feSpecularLighting result="spec" in="blur" specularExponent="30" specularConstant="0.75" lighting-color="#ffffff">
+                    <fePointLight x="200" y="-100" z="200"/>
+                </feSpecularLighting>
+                <feComposite operator="in" in="spec" in2="SourceAlpha" result="litShape"/>
+                
+                <feMerge>
+                    <feMergeNode in="greyShape"/>
+                    <feMergeNode in="litShape"/>
+                </feMerge>
+            </filter>
+        </defs>
+    </svg>
+
+    <header>
+        <button class="menu-btn" aria-label="Apri Menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="10" y1="7" x2="20" y2="7"></line>
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <line x1="10" y1="17" x2="20" y2="17"></line>
+            </svg>
+        </button>
+    </header>
+
+    <nav class="fullscreen-menu" id="fullscreenMenu">
+        <!-- Bolla d'espansione bianca iniziale -->
+        <div class="menu-wave-bg"></div> 
+        <!-- Strato di vignettatura stabile in blu scuro (#0c2049) attivo a menu aperto -->
+        <div class="menu-vignette-overlay"></div>
+        
+        <button class="close-menu-btn" aria-label="Chiudi Menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+
+        <div class="menu-content">
+            <img src="img/logoblu.png" alt="F.A. SRL Logo Blu" class="menu-logo">
+            
+            <ul class="menu-links">
+                <li><a href="#home" class="menu-link">Home</a></li>
+                <li><a href="#chi-siamo" class="menu-link">Chi Siamo</a></li>
+                <li><a href="#servizi" class="menu-link">Servizi</a></li>
+                <li><a href="#contatti" class="menu-link">Contatti</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="scroll-line-track"><div class="scroll-line-dot"></div></div>
+        SCORRI
+    </div>
+
+    <div class="hero-vignette" id="heroVignette"></div>
+
+    <div class="sheets-corner sheets-corner--left" id="sheetsLeft">
+        <div class="sheet" data-rot="-42" data-delay="0.08" style="left:-68px; top:-70px; z-index:1; transform: translateY(-350px) rotate(-42deg);">
+            <canvas class="sheet-canvas" data-type="blueprint" data-mirror="0"></canvas>
+        </div>
+        <div class="sheet" data-rot="-4" data-delay="0.24" style="left:-48px; top:18px; z-index:3; transform: translateY(-350px) rotate(-4deg);">
+            <canvas class="sheet-canvas" data-type="study" data-mirror="0"></canvas>
+        </div>
+        <div class="sheet" data-rot="24" data-delay="0.4" style="left:82px; top:-78px; z-index:2; transform: translateY(-350px) rotate(24deg);">
+            <canvas class="sheet-canvas" data-type="detail" data-mirror="0"></canvas>
+        </div>
+        <div class="sheet" data-rot="9" data-delay="0.58" style="left:44px; top:-2px; z-index:4; transform: translateY(-350px) rotate(9deg);">
+            <canvas class="sheet-canvas" data-type="stamp" data-mirror="0"></canvas>
+        </div>
+        <svg class="pencil-deco" data-rot="-50" data-delay="0.85" data-flip="0" viewBox="0 0 260 40" width="215" height="34"
+             style="left:-12px; top:62px; transform: translateY(-350px) rotate(-50deg);">
+            <defs>
+                <linearGradient id="pencilBodyL" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffe08a"/>
+                    <stop offset="45%" stop-color="#f4b93f"/>
+                    <stop offset="55%" stop-color="#d99416"/>
+                    <stop offset="100%" stop-color="#a86c07"/>
+                </linearGradient>
+            </defs>
+            <rect x="40" y="12" width="170" height="16" fill="url(#pencilBodyL)"/>
+            <rect x="40" y="12" width="170" height="3" fill="rgba(255,255,255,0.45)"/>
+            <rect x="40" y="25" width="170" height="3" fill="rgba(0,0,0,0.2)"/>
+            <rect x="60" y="12" width="3" height="16" fill="rgba(0,0,0,0.15)"/>
+            <rect x="120" y="12" width="3" height="16" fill="rgba(0,0,0,0.15)"/>
+            <rect x="170" y="12" width="3" height="16" fill="rgba(0,0,0,0.15)"/>
+            <polygon points="0,20 40,10 40,30" fill="#e9c99a"/>
+            <polygon points="0,20 18,16 18,24" fill="#3a2a1a"/>
+            <rect x="210" y="10" width="22" height="20" fill="#cfd6dc"/>
+            <rect x="210" y="10" width="22" height="6" fill="rgba(255,255,255,0.55)"/>
+            <rect x="232" y="8" width="20" height="24" rx="8" fill="#e88a99"/>
+        </svg>
+    </div>
+
+    <div class="sheets-corner sheets-corner--right" id="sheetsRight">
+        <div class="sheet" data-rot="40" data-delay="0.14" style="right:-52px; top:-76px; z-index:2; transform: translateY(-350px) rotate(40deg);">
+            <canvas class="sheet-canvas" data-type="study" data-mirror="1"></canvas>
+        </div>
+        <div class="sheet" data-rot="6" data-delay="0.3" style="right:-72px; top:-4px; z-index:1; transform: translateY(-350px) rotate(6deg);">
+            <canvas class="sheet-canvas" data-type="blueprint" data-mirror="1"></canvas>
+        </div>
+        <div class="sheet" data-rot="-26" data-delay="0.48" style="right:60px; top:-56px; z-index:3; transform: translateY(-350px) rotate(-26deg);">
+            <canvas class="sheet-canvas" data-type="stamp" data-mirror="1"></canvas>
+        </div>
+        <div class="sheet" data-rot="-6" data-delay="0.66" style="right:28px; top:20px; z-index:4; transform: translateY(-350px) rotate(-6deg);">
+            <canvas class="sheet-canvas" data-type="detail" data-mirror="1"></canvas>
+        </div>
+        <svg class="pencil-deco" data-rot="34" data-delay="0.9" viewBox="0 0 140 160" width="118" height="134"
+             style="right:2px; top:40px; transform: translateY(-340px) rotate(34deg);">
+            <defs>
+                <linearGradient id="compassMetal" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f2f5f8"/>
+                    <stop offset="45%" stop-color="#c7d0da"/>
+                    <stop offset="55%" stop-color="#98a4b2"/>
+                    <stop offset="100%" stop-color="#5c6875"/>
+                </linearGradient>
+                <linearGradient id="compassMetal2" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#fbfcfe"/>
+                    <stop offset="50%" stop-color="#d7dee6"/>
+                    <stop offset="100%" stop-color="#7c8996"/>
+                </linearGradient>
+            </defs>
+            <polygon points="66,18 20,148 32,152 72,26" fill="url(#compassMetal)"/>
+            <polygon points="74,18 112,140 100,146 68,26" fill="url(#compassMetal2)"/>
+            <polygon points="20,148 32,152 25,160" fill="#3a2a1a"/>
+            <polygon points="112,140 100,146 106,156" fill="#2a2a2a"/>
+            <circle cx="70" cy="20" r="12" fill="url(#compassMetal2)" stroke="#5c6875" stroke-width="1.5"/>
+            <circle cx="70" cy="20" r="4" fill="#3a4048"/>
+            <rect x="64" y="2" width="12" height="14" rx="3" fill="url(#compassMetal)"/>
+            <line x1="70" y1="4" x2="70" y2="14" stroke="#5c6875" stroke-width="1.5"/>
+        </svg>
+    </div>
+
+    <div id="webgl-container"></div>
+
+    <section id="home">
+        <div class="hero-title-wrap">
+            <img src="img/logobianco.png" alt="F.A. SRL Logo" class="logo-inline">
+            <svg class="hero-svg-title" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+                <text x="450" y="90" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">AMMINISTRAZIONI</text>
+                <text x="450" y="181" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="104" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">CONDOMINIALI</text>
+                <rect x="25" y="195" width="850" height="4" fill="#ffffff" rx="2" />
+                <text x="450" y="270" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">SERVIZI DI INGEGNERIA</text>
+            </svg>
+        </div>
+    </section>
+
+    <section id="chi-siamo">
+        <div class="about-content">
+            <h2>Siamo una società nata nel 2026, fondata sull'esperienza e pronta a ridefinire il settore con idee innovative e soluzioni su misura.</h2>
+            <div class="chi-siamo-tags" id="chiSiamoTags">
+                <a href="#servizi3d" class="tag" id="btnCondominioHome">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 21V10.5L12 4l8 6.5V21"/>
+                        <path d="M9 21v-6h6v6"/>
+                        <path d="M4 21h16"/>
+                    </svg>
+                    <span>Gestione Condominiale</span>
+                </a>
+                <a href="#servizi3d" class="tag" id="btnIngegneriaHome">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="5" r="2.2"/>
+                        <path d="M6 20l6-13 6 13"/>
+                        <path d="M8.6 14h6.8"/>
+                    </svg>
+                    <span>Servizi di Ingegneria</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEZIONE SERVIZI: INTRO (ID impostato su #servizi per il link del menu) -->
+    <section class="servizi-intro" id="servizi">
+        <span class="subtitle">COSA FACCIAMO</span>
+        <h2>I Nostri Servizi</h2>
+        <p>Due competenze, un'unica visione: la cura quotidiana della gestione condominiale e la precisione tecnica dell'ingegneria, in un solo partner.</p>
+    </section>
+
+    <!-- SEZIONE SERVIZI: SCROLLYTELLING PALAZZO PNG & TRANSIZIONI LISTE -->
+    <section class="servizi-3d" id="servizi3d">
+        <div class="servizi-3d-sticky">
+            
+            <div class="building-png-container">
+                <div class="building-scroll-track" id="buildingTrack">
+                    <img src="img/grattacielo.png" alt="Grattacielo F.A. SRL" class="skyscraper-img">
+                </div>
+            </div>
+
+            <div class="servizi-columns">
+                
+                <div class="servizi-col servizi-col-left" id="colCondominio">
+                    <div class="servizi-col-header">
+                        <h3>Amministrazioni<br>Condominiali</h3>
+                    </div>
+                    <ul class="servizi-list" id="listCondominio">
+                        <li>Gestione Completa del Condominio</li>
+                        <li>Contabilità e Rendiconti</li>
+                        <li>Pratiche Assicurative</li>
+                        <li>Assistenza Tecnica e Amministrativa</li>
+                    </ul>
+                    <button class="btn-preventivo" id="btnPreventivoCondominio" onclick="openModal('condominio')">Richiedi Preventivo</button>
+                </div>
+
+                <div class="servizi-col servizi-col-right" id="colIngegneria">
+                    <div class="servizi-col-header">
+                        <h3>Servizi di<br>Ingegneria</h3>
+                    </div>
+                    <ul class="servizi-list" id="listIngegneria">
+                        <li>Progettazione Civile e Industriale</li>
+                        <li>Consulenza Tecnica</li>
+                        <li>Studi di Fattibilità</li>
+                        <li>Computi Metrici Estimativi</li>
+                        <li>Direzione Lavori</li>
+                        <li>Coordinamento Sicurezza</li>
+                        <li>Certificazioni Energetiche</li>
+                        <li>Pratiche Catastali e Comunali</li>
+                    </ul>
+                    <button class="btn-preventivo" id="btnPreventivoIngegneria" onclick="openModal('ingegneria')">Richiedi Preventivo</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Ambientazione Fondamenta e Ombra bloccata alla fine della sezione servizi -->
+        <div class="building-ground-env">
+            <div class="ground-shadow"></div>
+            <div class="ground-line"></div>
+        </div>
+    </section>
+
+    <!-- SEZIONE FOOTER / CONTATTI -->
+    <section id="contatti" class="footer-section">
+        <img src="img/logobianco.png" alt="F.A. SRL Watermark" class="footer-watermark">
+        
+        <div class="footer-content">
+            <div class="footer-left">
+                <h2>INIZIA UN<br>PROGETTO.</h2>
+                <p class="footer-subtitle">Ogni grande progetto parte da una stretta di mano. Prenota un appuntamento e vieni a trovarci nel nostro ufficio operativo.</p>
+                <div class="footer-left-links">
+                    <a href="mailto:amministrazione@fasrl.net">amministrazione@fasrl.net</a>
+                    <a href="tel:+393520700071">Cell: 352 0700071</a>
+                    <a href="tel:+390399998459">Tel: 039 9998459</a>
+                </div>
+            </div>
+            
+            <div class="footer-right">
+                <div class="footer-info-block">
+                    <h4>SEDE LEGALE E OPERATIVA</h4>
+                    <p>
+                        <a href="https://maps.google.com/?q=Via+Carlo+Rota+12,+20900+Monza+MB+Italia" target="_blank" rel="noopener noreferrer">
+                            VIA CARLO ROTA, 12<br>20900 MONZA (MB)<br>ITALIA
+                        </a>
+                    </p>
+                </div>
+                <div class="footer-info-block">
+                    <h4>DIREZIONE</h4>
+                    <p>Amm.re FLAVIO ATTANASIO<br>Ing. SALVATORE ATTANASIO</p>
+                </div>
+                <div class="footer-info-block">
+                    <h4>DATI SOCIETARI</h4>
+                    <p>
+                        C.F. / P.IVA: 14732610960<br>
+                        Reg. Imprese di Milano Monza Brianza Lodi<br>
+                        REA: MB - 2803606<br>
+                        Cap. Soc. € 10.000,00 i.v.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 F.A. S.R.L. TUTTI I DIRITTI RISERVATI.</span>
+            <a href="privacy.html">Informativa sulla Privacy</a>
+        </div>
+    </section>
+
+    <!-- =========================================
+         MODALE PREVENTIVI
+    ========================================= -->
+    <div id="preventivoModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()" aria-label="Chiudi Modale">&times;</button>
+
+            <div id="modalFormView">
+            <h2 id="modalTitle">Richiedi Preventivo</h2>
+            
+            <form id="preventivoForm">
+                <!-- Campi Condominio -->
+                <div id="campiCondominio" style="display:none;">
+                    <div class="form-section-title">Dati di contatto</div>
+                    <div class="form-group">
+                        <label for="nomeCondominio">Nome e cognome *</label>
+                        <input type="text" name="nomeCondominio" id="nomeCondominio" placeholder="Inserisci nome e cognome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telCondominio">Telefono *</label>
+                        <input type="tel" name="telCondominio" id="telCondominio" placeholder="Inserisci il tuo telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailCondominio">Email *</label>
+                        <input type="email" name="emailCondominio" id="emailCondominio" placeholder="Inserisci la tua email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="comuneCondominio">Comune/località del condominio *</label>
+                        <input type="text" name="comuneCondominio" id="comuneCondominio" placeholder="Inserisci comune o località" required>
+                    </div>
+
+                    <div class="form-section-title">Servizio richiesto</div>
+                    <div class="form-group">
+                        <label for="servizioCondominioMenu">Seleziona servizio *</label>
+                        <select name="servizioCondominioMenu" id="servizioCondominioMenu" required>
+                            <option value="">Seleziona un servizio...</option>
+                            <option value="Gestione completa del condominio">Gestione completa del condominio</option>
+                            <option value="Contabilità e rendiconti">Contabilità e rendiconti</option>
+                            <option value="Pratiche assicurative">Pratiche assicurative</option>
+                            <option value="Assistenza tecnica e amministrativa">Assistenza tecnica e amministrativa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section-title">Informazioni preliminari</div>
+                    <div class="form-group">
+                        <label for="numAppartamenti">Numero di appartamenti / unità immobiliari *</label>
+                        <input type="number" name="unita" id="numAppartamenti" min="1" placeholder="Es: 15" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numBox">Numero di box (esterni al condominio) *</label>
+                        <input type="number" name="box" id="numBox" min="0" placeholder="Es: 5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numScale">Numero di scale *</label>
+                        <input type="number" name="scale" id="numScale" min="1" placeholder="Es: 2" required>
+                    </div>
+
+                    <div class="form-section-title">Informazioni sulla richiesta</div>
+                    <div class="form-group">
+                        <label for="dettagliCondominio">Descrivi brevemente di cosa hai bisogno *</label>
+                        <textarea name="dettagliCondominio" id="dettagliCondominio" rows="3" placeholder="Scrivi i dettagli..." required></textarea>
+                    </div>
+
+                    <div class="form-section-title">Allegati</div>
+                    <div class="form-group">
+                        <label for="fileCondominio">Documenti / foto / ultimo rendiconto condominiale (facoltativo)</label>
+                        <input type="file" id="fileCondominio" multiple>
+                        <!-- Campo nascosto per indicare se ci sono allegati o meno via EmailJS -->
+                        <input type="hidden" name="allegatiStatusC" id="allegatiStatusC" value="Nessun allegato">
+                        <!-- Avviso limite superato -->
+                        <div id="fileSizeWarningC" class="file-warning-msg">
+                            ⚠️ Limite di 16 MB superato! Rimuovi qualche file per poter procedere.
+                        </div>
+                        <!-- Container per la lista interattiva dei file con pulsante rimozione -->
+                        <div id="fileListContainerC" class="file-list-container"></div>
+                    </div>
+
+                    <div class="form-group-checkbox">
+                        <input type="checkbox" id="privacyCondominio" required>
+                        <label for="privacyCondominio">Presa visione dell’<a href="privacy.html" target="_blank" rel="noopener noreferrer">informativa privacy</a> *</label>
+                    </div>
+                </div>
+
+                <!-- Campi Ingegneria -->
+                <div id="campiIngegneria" style="display:none;">
+                    <div class="form-section-title">Dati di contatto</div>
+                    <div class="form-group">
+                        <label for="nomeIng">Nome e cognome *</label>
+                        <input type="text" name="nomeIng" id="nomeIng" placeholder="Inserisci nome e cognome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telIng">Telefono *</label>
+                        <input type="tel" name="telIng" id="telIng" placeholder="Inserisci il tuo telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailIng">Email *</label>
+                        <input type="email" name="emailIng" id="emailIng" placeholder="Inserisci la tua email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="comuneIng">Comune/località dell’intervento *</label>
+                        <input type="text" name="comuneIng" id="comuneIng" placeholder="Inserisci comune o località" required>
+                    </div>
+
+                    <div class="form-section-title">Servizio richiesto</div>
+                    <div class="form-group">
+                        <label for="servizioIngMenu">Seleziona servizio *</label>
+                        <select name="servizioIngMenu" id="servizioIngMenu" required>
+                            <option value="">Seleziona un servizio...</option>
+                            <option value="Progettazione / pratiche edilizie">Progettazione / pratiche edilizie</option>
+                            <option value="Direzione lavori">Direzione lavori</option>
+                            <option value="Pratiche catastali">Pratiche catastali</option>
+                            <option value="APE / certificazione energetica">APE / certificazione energetica</option>
+                            <option value="Perizie / relazioni tecniche">Perizie / relazioni tecniche</option>
+                            <option value="Sicurezza cantieri">Sicurezza cantieri</option>
+                            <option value="Consulenza tecnica">Consulenza tecnica</option>
+                            <option value="Altro">Altro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section-title">Informazioni sulla richiesta</div>
+                    <div class="form-group">
+                        <label for="dettagliIng">Descrivi brevemente di cosa hai bisogno *</label>
+                        <textarea name="dettagliIng" id="dettagliIng" rows="3" placeholder="Scrivi i dettagli..." required></textarea>
+                    </div>
+
+                    <div class="form-section-title">Allegati</div>
+                    <div class="form-group">
+                        <label for="fileIng">Foto/documenti (facoltativo)</label>
+                        <input type="file" id="fileIng" multiple>
+                        <!-- Campo nascosto per indicare se ci sono allegati o meno via EmailJS -->
+                        <input type="hidden" name="allegatiStatus" id="allegatiStatus" value="Nessun allegato">
+                        <!-- Avviso di limite superato -->
+                        <div id="fileSizeWarning" class="file-warning-msg">
+                            ⚠️ Limite di 16 MB superato! Rimuovi qualche file per poter procedere.
+                        </div>
+                        <!-- Container per la lista interattiva dei file con pulsante rimozione -->
+                        <div id="fileListContainer" class="file-list-container"></div>
+                    </div>
+
+                    <div class="form-group-checkbox">
+                        <input type="checkbox" id="privacyIng" required>
+                        <label for="privacyIng">Presa visione dell’<a href="privacy.html" target="_blank" rel="noopener noreferrer">informativa privacy</a> *</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btnSubmitModal">Richiedi informazioni / preventivo</button>
+            </form>
+            </div>
+
+            <!-- Schermata di conferma invio riuscito -->
+            <div id="modalSuccessView" class="modal-feedback">
+                <div class="feedback-icon success-icon">&#10003;</div>
+                <h2>Richiesta inviata!</h2>
+                <p id="modalSuccessMessage">Grazie per averci contattato. Ti risponderemo al più presto.</p>
+                <button type="button" class="btn-submit" onclick="closeModal()">Chiudi</button>
+            </div>
+
+            <!-- Schermata di errore invio -->
+            <div id="modalErrorView" class="modal-feedback">
+                <div class="feedback-icon error-icon">!</div>
+                <h2>Invio non riuscito</h2>
+                <p id="modalErrorMessage">Si è verificato un errore. Riprova più tardi o contattaci direttamente.</p>
+                <button type="button" class="btn-submit" onclick="showFormView()">Torna al modulo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT CANVAS / BACKGROUND ANIMATIONS -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
+        function paperGrain(ctx, w, h, alpha) {
+            const grain = ctx.createImageData(w, h);
+            for (let i = 0; i < grain.data.length; i += 4) {
+                const n = (Math.random() * 26) - 13;
+                grain.data[i] = grain.data[i + 1] = grain.data[i + 2] = 128 + n;
+                grain.data[i + 3] = Math.floor(alpha * 255);
+            }
+            const gc = document.createElement('canvas');
+            gc.width = w; gc.height = h;
+            gc.getContext('2d').putImageData(grain, 0, 0);
+            ctx.save(); ctx.globalCompositeOperation = 'overlay'; ctx.drawImage(gc, 0, 0); ctx.restore();
+        }
+        function lightingGradient(ctx, w, h, darkColor) {
+            const g = ctx.createLinearGradient(0, 0, w, h);
+            g.addColorStop(0, 'rgba(255,255,255,0.22)'); g.addColorStop(0.45, 'rgba(255,255,255,0)'); g.addColorStop(1, darkColor);
+            ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        }
+        function foldCrease(ctx, w, h) {
+            const y = h * 0.5; ctx.save();
+            const shadow = ctx.createLinearGradient(0, y - 14, 0, y + 14);
+            shadow.addColorStop(0, 'rgba(0,0,0,0)'); shadow.addColorStop(0.5, 'rgba(0,0,0,0.16)'); shadow.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = shadow; ctx.fillRect(0, y - 14, w, 28);
+            const hi = ctx.createLinearGradient(0, y - 3, 0, y + 3);
+            hi.addColorStop(0, 'rgba(255,255,255,0)'); hi.addColorStop(0.5, 'rgba(255,255,255,0.18)'); hi.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = hi; ctx.fillRect(0, y - 3, w, 6); ctx.restore();
+        }
+        function dogEar(ctx, w, h, size, colorLight, colorDark) {
+            ctx.save(); ctx.beginPath(); ctx.moveTo(w - size, 0); ctx.lineTo(w, size); ctx.lineTo(w - size * 0.18, size * 0.92); ctx.closePath();
+            const grad = ctx.createLinearGradient(w - size, 0, w, size);
+            grad.addColorStop(0, colorLight); grad.addColorStop(1, colorDark);
+            ctx.shadowColor = 'rgba(0,0,0,0.45)'; ctx.shadowBlur = 9; ctx.shadowOffsetX = -1; ctx.shadowOffsetY = 2;
+            ctx.fillStyle = grad; ctx.fill(); ctx.restore();
+        }
+        function inkLine(ctx, drawFn, width, color) {
+            ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            ctx.shadowColor = color; ctx.shadowBlur = width * 1.1; drawFn(); ctx.restore();
+        }
+        function drawBlueprintMini(ctx, w, h, mirror) {
+            const bg = ctx.createLinearGradient(0, 0, w, h); bg.addColorStop(0, '#0a3d73'); bg.addColorStop(1, '#0f4c8c');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+            ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1;
+            for (let gx = 0; gx <= w; gx += w * 0.09) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke(); }
+            for (let gy = 0; gy <= h; gy += w * 0.09) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke(); }
+            const M = w * 0.09, pw = w - M * 2, ph = h * 0.5;
+            inkLine(ctx, () => { ctx.strokeRect(M, M, pw, ph); }, w * 0.018, '#ffffff');
+            inkLine(ctx, () => {
+                ctx.beginPath(); const midX = mirror ? M + pw * 0.35 : M + pw * 0.6;
+                ctx.moveTo(midX, M); ctx.lineTo(midX, M + ph);
+                ctx.moveTo(M, M + ph * 0.5); ctx.lineTo(M + pw, M + ph * 0.5); ctx.stroke();
+            }, w * 0.012, '#ffffff');
+            inkLine(ctx, () => {
+                ctx.beginPath(); const dx = mirror ? M + pw * 0.35 : M + pw * 0.6;
+                ctx.arc(dx, M + ph * 0.5, ph * 0.18, 0, Math.PI / 2); ctx.stroke();
+            }, w * 0.006, '#ffffff');
+            ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = w * 0.007;
+            for (let i = 0; i < 5; i++) {
+                const y = M + ph + h * 0.055 + i * (h * 0.058);
+                ctx.beginPath(); ctx.moveTo(M, y); ctx.lineTo(M + pw * (0.92 - i * 0.14), y); ctx.stroke();
+            }
+            ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.font = `700 ${Math.round(w * 0.075)}px Helvetica, Arial, sans-serif`;
+            ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 4; ctx.fillText('PLANIMETRIA', M, M + ph + h * 0.35);
+            ctx.shadowBlur = 0; ctx.font = `400 ${Math.round(w * 0.05)}px Helvetica, Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.6)';
+            ctx.fillText('scala 1:100', M, M + ph + h * 0.42);
+            paperGrain(ctx, w, h, 0.08); foldCrease(ctx, w, h); lightingGradient(ctx, w, h, 'rgba(0,10,25,0.45)');
+            dogEar(ctx, w, h, w * 0.18, '#1a5090', '#082c54');
+        }
+        function drawStudyMini(ctx, w, h, mirror) {
+            const bg = ctx.createLinearGradient(0, 0, w, h); bg.addColorStop(0, '#fbfaf3'); bg.addColorStop(1, '#ece4d0');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = '#d0c8b0'; ctx.lineWidth = 2; ctx.strokeRect(2, 2, w - 4, h - 4);
+            for (let i = 0; i < 5; i++) {
+                const fx = Math.random() * w, fy = Math.random() * h, fr = 4 + Math.random() * 10;
+                const fg = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr);
+                fg.addColorStop(0, 'rgba(150,110,60,0.14)'); fg.addColorStop(1, 'rgba(150,110,60,0)');
+                ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(fx, fy, fr, 0, Math.PI * 2); ctx.fill();
+            }
+            const M = w * 0.13; ctx.save(); ctx.strokeStyle = '#2a2a2a'; ctx.lineWidth = w * 0.01; ctx.globalAlpha = 0.8; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            function handLine(pts) { ctx.beginPath(); pts.forEach((p, idx) => { const jx = p[0] + (Math.random() - 0.5) * 2.2; const jy = p[1] + (Math.random() - 0.5) * 2.2; idx === 0 ? ctx.moveTo(jx, jy) : ctx.lineTo(jx, jy); }); ctx.stroke(); }
+            if (mirror) { handLine([[w - M, h * 0.62], [w - M, h * 0.24], [w * 0.55, h * 0.13], [M + 22, h * 0.28], [M + 22, h * 0.62]]); } 
+            else { handLine([[M, h * 0.62], [M, h * 0.24], [w * 0.45, h * 0.13], [w - M - 22, h * 0.28], [w - M - 22, h * 0.62]]); }
+            ctx.globalAlpha = 0.42; handLine([[M, h * 0.44], [w - M, h * 0.44]]); ctx.globalAlpha = 0.28;
+            for (let hx = M + 10; hx < w - M - 10; hx += 9) { handLine([[hx, h * 0.46], [hx - 6, h * 0.6]]); } ctx.restore();
+            ctx.strokeStyle = '#8a8370'; ctx.lineWidth = w * 0.006;
+            for (let i = 0; i < 3; i++) { const y = h * 0.74 + i * (h * 0.055); ctx.beginPath(); ctx.moveTo(M, y); ctx.lineTo(w - M - i * 20, y); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(25,22,15,0.68)'; ctx.font = `italic 500 ${Math.round(w * 0.068)}px Georgia, 'Times New Roman', serif`;
+            ctx.fillText('studio preliminare', M, h * 0.95);
+            paperGrain(ctx, w, h, 0.07); foldCrease(ctx, w, h); lightingGradient(ctx, w, h, 'rgba(40,30,10,0.16)'); dogEar(ctx, w, h, w * 0.18, '#ffffff', '#d8d3c4');
+        }
+        function drawStampMini(ctx, w, h, mirror) {
+            const bg = ctx.createLinearGradient(0, 0, w, h); bg.addColorStop(0, '#fbfaf6'); bg.addColorStop(1, '#efeadd');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = '#d8d3c4'; ctx.lineWidth = 2; ctx.strokeRect(2, 2, w - 4, h - 4);
+            const M = w * 0.12, pw = w - M * 2, ph = h * 0.4;
+            inkLine(ctx, () => { ctx.strokeRect(M, M, pw, ph); }, w * 0.014, '#0d2847');
+            inkLine(ctx, () => { ctx.beginPath(); const mx = M + pw * (mirror ? 0.62 : 0.38); ctx.moveTo(mx, M); ctx.lineTo(mx, M + ph); ctx.stroke(); }, w * 0.009, '#0d2847');
+            ctx.strokeStyle = '#a9b4c4'; ctx.lineWidth = w * 0.007;
+            for (let i = 0; i < 3; i++) { const y = M + ph + h * 0.045 + i * (h * 0.06); ctx.beginPath(); ctx.moveTo(M, y); ctx.lineTo(M + pw * (0.82 - i * 0.12), y); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(13,40,71,0.85)'; ctx.font = `700 ${Math.round(w * 0.055)}px Helvetica, Arial, sans-serif`; ctx.fillText('REV. 03', M, M + ph + h * 0.3);
+            const stampX = mirror ? M + 26 : M + pw - 26; const stampY = h * 0.86;
+            ctx.save(); ctx.translate(stampX, stampY); ctx.rotate(mirror ? 0.25 : -0.25);
+            ctx.strokeStyle = '#ff3b2f'; ctx.lineWidth = w * 0.013; ctx.beginPath(); ctx.arc(0, 0, w * 0.08, 0, Math.PI * 2); ctx.stroke();
+            ctx.beginPath(); ctx.arc(0, 0, w * 0.062, 0, Math.PI * 2); ctx.lineWidth = w * 0.005; ctx.stroke();
+            ctx.font = `bold ${Math.round(w * 0.058)}px Helvetica, Arial, sans-serif`; ctx.fillStyle = '#ff3b2f'; ctx.fillText('FA', -w * 0.03, w * 0.02); ctx.restore();
+            paperGrain(ctx, w, h, 0.07); foldCrease(ctx, w, h); lightingGradient(ctx, w, h, 'rgba(40,30,10,0.16)'); dogEar(ctx, w, h, w * 0.18, '#ffffff', '#d8d3c4');
+        }
+        function drawDetailMini(ctx, w, h, mirror) {
+            const bg = ctx.createLinearGradient(0, 0, w, h); bg.addColorStop(0, '#f2f4f8'); bg.addColorStop(1, '#dde3ec');
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h); ctx.strokeStyle = '#c3cbd8'; ctx.lineWidth = 2; ctx.strokeRect(2, 2, w - 4, h - 4);
+            const M = w * 0.14, bx = mirror ? w - M - w * 0.45 : M, by = h * 0.16, bw = w * 0.45, bh = h * 0.42;
+            inkLine(ctx, () => { ctx.strokeRect(bx, by, bw, bh); }, w * 0.014, '#13315c');
+            ctx.save(); ctx.strokeStyle = '#13315c'; ctx.lineWidth = w * 0.004; ctx.globalAlpha = 0.55; ctx.beginPath();
+            for (let hx = -bh; hx < bw; hx += w * 0.022) { ctx.moveTo(bx + hx, by + bh); ctx.lineTo(bx + hx + bh, by); } ctx.stroke(); ctx.restore();
+            const dimY = by + bh + h * 0.05;
+            inkLine(ctx, () => { ctx.beginPath(); ctx.moveTo(bx, dimY); ctx.lineTo(bx + bw, dimY); ctx.stroke(); }, w * 0.005, '#13315c');
+            ctx.strokeStyle = '#13315c'; ctx.lineWidth = w * 0.005;
+            for (let i = 0; i <= 4; i++) { const x = bx + (bw / 4) * i; ctx.beginPath(); ctx.moveTo(x, dimY - 6); ctx.lineTo(x, dimY + 6); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(19,49,92,0.75)'; ctx.font = `600 ${Math.round(w * 0.038)}px Helvetica, Arial, sans-serif`; ctx.fillText('30  60  30  45', bx, dimY + h * 0.05);
+            ctx.fillStyle = 'rgba(19,49,92,0.55)'; ctx.font = `400 ${Math.round(w * 0.045)}px Helvetica, Arial, sans-serif`; ctx.fillText('sez. A-A · 1:20', M, h * 0.9);
+            paperGrain(ctx, w, h, 0.06); foldCrease(ctx, w, h); lightingGradient(ctx, w, h, 'rgba(20,30,50,0.14)'); dogEar(ctx, w, h, w * 0.18, '#ffffff', '#c3cbd8');
+        }
+        document.querySelectorAll('canvas.sheet-canvas').forEach((canvas) => {
+            const w = 420, h = 588; canvas.width = w; canvas.height = h; const ctx = canvas.getContext('2d');
+            const mirror = canvas.dataset.mirror === '1', type = canvas.dataset.type;
+            if (type === 'blueprint') drawBlueprintMini(ctx, w, h, mirror); else if (type === 'study') drawStudyMini(ctx, w, h, mirror); else if (type === 'detail') drawDetailMini(ctx, w, h, mirror); else drawStampMini(ctx, w, h, mirror);
+        });
+    </script>
+
+    <script>
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const heroVignette = document.getElementById('heroVignette');
+        const chiSiamoTags = document.getElementById('chiSiamoTags');
+        const menuBtnEl = document.querySelector('.menu-btn');
+        const serviziIntroEl = document.getElementById('servizi');
+        const servizi3dEl = document.getElementById('servizi3d');
+        const contattiEl = document.getElementById('contatti');
+        
+        let lastScrollTop = 0;
+        let scrollIdleTimer = null;
+
+        function updateOnScroll() {
+            const sp = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
+            const sp2 = Math.min(Math.max((window.scrollY - window.innerHeight) / window.innerHeight, 0), 1);
+            
+            heroVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
+            chiSiamoTags.classList.toggle('visible', sp > 0.55);
+            menuBtnEl.style.opacity = sp > 0.5 ? '1' : '0';
+            menuBtnEl.style.pointerEvents = sp > 0.5 ? 'auto' : 'none';
+
+            // Controllo se il pulsante menu e l'indicatore scorri si trovano sopra le sezioni bianche
+            if (serviziIntroEl && servizi3dEl) {
+                const introRect = serviziIntroEl.getBoundingClientRect();
+                const servizi3dRect = servizi3dEl.getBoundingClientRect();
+                
+                const btnCheckPosition = 120; 
+                
+                const isOverIntro = introRect.top <= btnCheckPosition && introRect.bottom >= btnCheckPosition;
+                const isOverServizi3d = servizi3dRect.top <= btnCheckPosition && servizi3dRect.bottom >= btnCheckPosition;
+
+                if (isOverIntro || isOverServizi3d) {
+                    menuBtnEl.classList.add('on-white');
+                    scrollIndicator.classList.add('on-white');
+                } else {
+                    menuBtnEl.classList.remove('on-white');
+                    scrollIndicator.classList.remove('on-white');
+                }
+            }
+
+            // Controllo bilanciato per nascondere lo "SCORRI" appena prima di entrare nei contatti
+            let isInsideContatti = false;
+            if (contattiEl) {
+                const contattiRect = contattiEl.getBoundingClientRect();
+                if (contattiRect.top <= window.innerHeight * 1.05) {
+                    isInsideContatti = true;
+                }
+            }
+
+            if (isInsideContatti) {
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+                scrollIndicator.style.opacity = '0';
+                clearTimeout(scrollIdleTimer);
+                scrollIdleTimer = setTimeout(() => {
+                    if (!scrollIndicator.classList.contains('hidden')) {
+                        scrollIndicator.style.opacity = '1';
+                    }
+                }, 2200);
+            }
+
+            window.planSlideSp2 = sp2;
+        }
+
+        window.addEventListener('scroll', updateOnScroll, { passive: true });
+        updateOnScroll();
+
+        const sheetEls = Array.from(document.querySelectorAll('.sheet, .pencil-deco'));
+        const sheetsStart = performance.now();
+        function easeOutBack(t) { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
+
+        function animateSheets() {
+            requestAnimationFrame(animateSheets);
+            const elapsed = (performance.now() - sheetsStart) / 1000;
+            const sp = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
+            const retract = Math.min(sp * 1.5, 1) * 450;
+            sheetEls.forEach((el) => {
+                const delay = parseFloat(el.dataset.delay), rot = parseFloat(el.dataset.rot);
+                const flip = el.dataset.flip === '1' ? ' scaleX(-1)' : '';
+                const t = Math.min(Math.max((elapsed - delay) / 0.9, 0), 1);
+                const eased = easeOutBack(t);
+                const entranceY = (1 - eased) * -350;
+                const y = entranceY - retract;
+                el.style.transform = `translateY(${y}px) rotate(${rot}deg)${flip}`;
+            });
+        }
+        animateSheets();
+    </script>
+
+    <script>
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 12;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
+        container.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.35); scene.add(ambientLight);
+        const keyLight = new THREE.DirectionalLight(0xfff4e6, 1.35);
+        keyLight.position.set(6, 8, 9); keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 1024; keyLight.shadow.mapSize.height = 1024;
+        keyLight.shadow.camera.left = -11; keyLight.shadow.camera.right = 11;
+        keyLight.shadow.camera.top = 6; keyLight.shadow.camera.bottom = -6;
+        keyLight.shadow.camera.near = 1; keyLight.shadow.camera.far = 30; scene.add(keyLight);
+        const fillLight = new THREE.PointLight(0xbcd4ff, 0.55); fillLight.position.set(-8, -3, 6); scene.add(fillLight);
+        const rimLight = new THREE.DirectionalLight(0xcfe6ff, 0.85); rimLight.position.set(-4, 3, -8); scene.add(rimLight);
+
+        function generatePlanTexture() {
+            const w = 1536, h = 800; const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h; const ctx = canvas.getContext('2d');
+            const bgGrad = ctx.createLinearGradient(0, 0, w, h); bgGrad.addColorStop(0, '#0a3d73'); bgGrad.addColorStop(0.5, '#0f4c8c'); bgGrad.addColorStop(1, '#0a3d73');
+            ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, w, h);
+            const grain = ctx.createImageData(w, h);
+            for (let i = 0; i < grain.data.length; i += 4) { const n = (Math.random() * 18) - 9; grain.data[i] = grain.data[i + 1] = grain.data[i + 2] = 128 + n; grain.data[i + 3] = 10; }
+            const grainCanvas = document.createElement('canvas'); grainCanvas.width = w; grainCanvas.height = h; grainCanvas.getContext('2d').putImageData(grain, 0, 0);
+            ctx.globalCompositeOperation = 'overlay'; ctx.globalAlpha = 0.5; ctx.drawImage(grainCanvas, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+            ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 1;
+            for (let x = 0; x <= w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+            for (let y = 0; y <= h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+            function inkLine(draw, width) { ctx.save(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = 'rgba(255,255,255,0.55)'; ctx.shadowBlur = width * 1.4; draw(); ctx.restore(); }
+            const M = 90, PW = w - M * 2 - 260, PH = h - M * 2;
+            inkLine(() => { ctx.strokeRect(M, M, PW, PH); }, 6);
+            ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1.5; ctx.strokeRect(M + 10, M + 10, PW - 20, PH - 20);
+            const wallX1 = M + PW * 0.42, wallX2 = M + PW * 0.68, wallY1 = M + PH * 0.55;
+            inkLine(() => { ctx.beginPath(); ctx.moveTo(wallX1, M); ctx.lineTo(wallX1, M + PH); ctx.moveTo(wallX2, M); ctx.lineTo(wallX2, wallY1); ctx.moveTo(wallX1, wallY1); ctx.lineTo(M + PW, wallY1); ctx.moveTo(M, M + PH * 0.32); ctx.lineTo(wallX1, M + PH * 0.32); ctx.stroke(); }, 4);
+            function door(x, y, r, a0, a1, hx, hy) { inkLine(() => { ctx.beginPath(); ctx.arc(x, y, r, a0, a1); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(hx, hy); ctx.stroke(); }, 2); }
+            door(wallX1, M + PH * 0.32, 55, Math.PI * 0.5, Math.PI, wallX1, M + PH * 0.32 + 55); door(wallX1, M + PH * 0.78, 50, Math.PI * 1.5, Math.PI * 2, wallX1 + 50, M + PH * 0.78); door(wallX2, wallY1, 48, Math.PI, Math.PI * 1.5, wallX2 - 48, wallY1); door(M + PW * 0.18, wallY1, 46, Math.PI * 1.5, Math.PI * 2, M + PW * 0.18, wallY1 - 46);
+            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.globalAlpha = 0.85; [M + PW * 0.1, M + PW * 0.56, M + PW * 0.82].forEach((wx) => { ctx.beginPath(); ctx.moveTo(wx, M - 12); ctx.lineTo(wx + 90, M - 12); ctx.stroke(); ctx.beginPath(); ctx.moveTo(wx, M); ctx.lineTo(wx + 90, M); ctx.stroke(); }); ctx.globalAlpha = 1;
+            ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 2; ctx.strokeRect(M + 30, M + 40, 130, 180); ctx.strokeRect(M + 42, M + 52, 106, 46); ctx.strokeRect(M + 30, M + PH * 0.32 + 20, 90, 40);
+            const tX = wallX1 + (wallX2 - wallX1) / 2, tY = M + 130; ctx.beginPath(); ctx.arc(tX, tY, 50, 0, Math.PI * 2); ctx.stroke(); for (let k = 0; k < 6; k++) { const ang = (k / 6) * Math.PI * 2; ctx.beginPath(); ctx.arc(tX + Math.cos(ang) * 72, tY + Math.sin(ang) * 72, 13, 0, Math.PI * 2); ctx.stroke(); }
+            ctx.strokeRect(wallX2 + 25, M + 35, 170, 60); ctx.strokeRect(wallX2 + 25, M + 105, 60, 55); ctx.strokeRect(wallX2 + 95, M + 105, 60, 55);
+            const kX = wallX2 + 25, kY = wallY1 - 90; ctx.strokeRect(kX, kY, 150, 45); [0, 1, 2, 3].forEach((i) => { ctx.beginPath(); ctx.arc(kX + 25 + i * 33, kY + 22, 11, 0, Math.PI * 2); ctx.stroke(); });
+            const bX = M + PW * 0.18 + 20, bY = wallY1 + 40; ctx.strokeRect(bX, bY, 55, 80); ctx.beginPath(); ctx.ellipse(bX + 27, bY + 130, 30, 40, 0, 0, Math.PI * 2); ctx.stroke();
+            const stX = M + 30, stY = wallY1 + 40; for (let s = 0; s < 7; s++) { ctx.beginPath(); ctx.moveTo(stX + 160, stY + s * 20); ctx.lineTo(stX + 260, stY + s * 20); ctx.stroke(); }
+            ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.font = '600 22px Helvetica, Arial, sans-serif'; ctx.fillText('CAMERA', M + 40, M + 260); ctx.fillText('STUDIO', M + 40, M + PH * 0.32 - 12); ctx.fillText('SOGGIORNO', wallX1 + 50, wallY1 - 30); ctx.fillText('CUCINA', wallX2 + 30, kY - 12); ctx.fillText('CAMERA 2', wallX2 + 30, M + 195); ctx.fillText('BAGNO', bX - 5, bY - 10); ctx.fillText('INGRESSO', stX + 160, wallY1 + 30);
+            const dimY = M + PH + 45; inkLine(() => { ctx.beginPath(); ctx.moveTo(M, dimY); ctx.lineTo(M + PW, dimY); ctx.stroke(); }, 1.5); for (let x = M; x <= M + PW; x += PW / 7) { inkLine(() => { ctx.beginPath(); ctx.moveTo(x, dimY - 8); ctx.lineTo(x, dimY + 8); ctx.stroke(); }, 1.5); } ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.font = '16px Helvetica, Arial, sans-serif'; ctx.fillText('14.80 m', M + PW / 2 - 32, dimY + 30);
+            const cx = M + PW - 55, cy = M + 55; ctx.save(); ctx.translate(cx, cy); inkLine(() => { ctx.beginPath(); ctx.arc(0, 0, 34, 0, Math.PI * 2); ctx.stroke(); }, 1.5); ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(-8, 6); ctx.lineTo(8, 6); ctx.closePath(); ctx.fill(); ctx.font = 'bold 15px Helvetica, Arial, sans-serif'; ctx.fillText('N', -5, -36); ctx.restore();
+            const cbX = w - 250, cbY = h - 190; ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 2; ctx.strokeRect(cbX, cbY, 190, 130); ctx.beginPath(); ctx.moveTo(cbX, cbY + 44); ctx.lineTo(cbX + 190, cbY + 44); ctx.stroke(); ctx.beginPath(); ctx.moveTo(cbX, cbY + 95); ctx.lineTo(cbX + 190, cbY + 95); ctx.stroke(); ctx.fillStyle = '#ffffff'; ctx.font = 'bold 19px Helvetica, Arial, sans-serif'; ctx.fillText('PLANIMETRIA', cbX + 14, cbY + 28); ctx.font = '13px Helvetica, Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.fillText('Scala 1:100 · Rev. 03', cbX + 14, cbY + 63); ctx.fillText('Progetto residenziale', cbX + 14, cbY + 81); ctx.fillText('F.A. SRL Ingegneria', cbX + 14, cbY + 118);
+            const vg = ctx.createRadialGradient(w / 2, h / 2, h * 0.25, w / 2, h / 2, h * 0.85); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,8,20,0.45)'); ctx.fillStyle = vg; ctx.fillRect(0, 0, w, h);
+            const texture = new THREE.CanvasTexture(canvas); texture.anisotropy = 8; texture.needsUpdate = true; return texture;
+        }
+
+        function generateBackTexture() {
+            const w = 512, h = 256; const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h; const ctx = canvas.getContext('2d');
+            const g = ctx.createLinearGradient(0, 0, w, h); g.addColorStop(0, '#dbe6f2'); g.addColorStop(1, '#c7d6e8');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); const texture = new THREE.CanvasTexture(canvas); texture.needsUpdate = true; return texture;
+        }
+
+        const planGroup = new THREE.Group();
+        const PLAN_WIDTH = 5.6, PLAN_HEIGHT = 3.0, SEG_X = 140, SEG_Y = 10, CORE_RADIUS = 0.3, SPIRAL_GROWTH = 0.05;
+        const planGeometry = new THREE.PlaneGeometry(PLAN_WIDTH, PLAN_HEIGHT, SEG_X, SEG_Y);
+        const frontMaterial = new THREE.MeshPhysicalMaterial({ map: generatePlanTexture(), side: THREE.DoubleSide, roughness: 0.5, metalness: 0.02, clearcoat: 0.3 });
+        const backMaterial = new THREE.MeshPhysicalMaterial({ map: generateBackTexture(), side: THREE.BackSide, roughness: 0.8 });
+        const planMeshFront = new THREE.Mesh(planGeometry, frontMaterial); planGroup.add(planMeshFront);
+        const basePositions = planGeometry.attributes.position.array.slice(); const posAttr = planGeometry.attributes.position;
+
+        function generateShadowTexture() {
+            const s = 256; const canvas = document.createElement('canvas'); canvas.width = canvas.height = s; const ctx = canvas.getContext('2d');
+            const g = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, s/2); g.addColorStop(0, 'rgba(0,0,0,0.4)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0,0,s,s);
+            return new THREE.CanvasTexture(canvas);
+        }
+        const contactShadow = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 2.4), new THREE.MeshBasicMaterial({ map: generateShadowTexture(), transparent: true, depthWrite: false }));
+        contactShadow.position.set(0.4, -1.6, -0.9); planGroup.add(contactShadow);
+        planGroup.scale.setScalar(1.02); scene.add(planGroup);
+
+        function updatePlanRoll(rollFraction) {
+            const rollStart = PLAN_WIDTH * (1 - rollFraction);
+            for (let i = 0; i < posAttr.count; i++) {
+                const bx = basePositions[i * 3], by = basePositions[i * 3 + 1], s = bx + PLAN_WIDTH / 2; let nx, nz;
+                if (s < rollStart) { const curlFactor = Math.min((rollStart - s) / (PLAN_WIDTH * 0.55), 1); nx = s - rollStart; nz = -0.16 * curlFactor * curlFactor; } 
+                else { const arcLen = s - rollStart; const R = CORE_RADIUS + SPIRAL_GROWTH * arcLen; const angle = arcLen / R; nx = R * Math.sin(angle); nz = R * (1 - Math.cos(angle)) * -1; }
+                posAttr.array[i * 3] = nx; posAttr.array[i * 3 + 2] = nz;
+            }
+            posAttr.needsUpdate = true; planGeometry.computeVertexNormals();
+        }
+
+        let scrollProgress = 0;
+        window.addEventListener('scroll', () => { scrollProgress = Math.max(0, Math.min(window.scrollY / window.innerHeight, 1)); });
+
+        const ROLL_END = 0.5, MOVE_START = 0.28, MOVE_END = 0.68;
+        function scrollUnrolled(sp) { if (sp <= ROLL_END) return 1 - easeInOutCubic(sp / ROLL_END); if (sp <= MOVE_END) return 0; return easeInOutCubic((sp - MOVE_END) / (1 - MOVE_END)); }
+        function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+        function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+        const clock = new THREE.Clock(); const INTRO_DURATION = 1.8; const vFovRad = camera.fov * Math.PI / 180;
+        function worldHalfWidth() { return (Math.tan(vFovRad / 2) * camera.position.z) * camera.aspect; }
+
+        const INTRO_Y = -0.55, CHI_SIAMO_Y = 1.0; const BASE_ROT_X = 0.16, BASE_ROT_Y = -0.14;
+        let currentRoll = 1, currentX = 0, currentY = INTRO_Y, currentRotZ = 0, initialized = false;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const halfW = worldHalfWidth(), introX = -halfW * 0.72, chiSiamoX = halfW * 0.72;
+            if (!initialized) { currentX = introX; initialized = true; }
+            const elapsedTime = clock.getElapsedTime(), introT = Math.min(elapsedTime / INTRO_DURATION, 1), introEase = easeOutCubic(introT);
+            let targetRoll, targetX, targetY, targetRotZ;
+
+            if (introT < 1) { targetRoll = 1 - introEase; targetX = introX; targetY = INTRO_Y; targetRotZ = 0; } 
+            else {
+                const unrolled = scrollUnrolled(scrollProgress); targetRoll = 1 - unrolled;
+                const half = easeInOutCubic(Math.max(0, Math.min((scrollProgress - MOVE_START) / (MOVE_END - MOVE_START), 1)));
+                targetX = THREE.MathUtils.lerp(introX, chiSiamoX, half); targetY = THREE.MathUtils.lerp(INTRO_Y, CHI_SIAMO_Y, half);
+                const rotTrigger = Math.max(0, Math.min((scrollProgress - MOVE_START) / (1 - MOVE_START), 1)); targetRotZ = easeOutCubic(rotTrigger) * Math.PI * 1.65;
+            }
+
+            const slideSp2 = window.planSlideSp2 || 0;
+            targetX += slideSp2 * halfW * 1.6; targetRotZ += slideSp2 * (Math.PI * 0.4); targetRoll = Math.max(targetRoll, Math.min(slideSp2 * 3, 1));
+            currentRoll += (targetRoll - currentRoll) * (slideSp2 > 0 ? 0.2 : 0.07); currentX += (targetX - currentX) * 0.13;
+            currentY += (targetY - currentY) * 0.1; currentRotZ += (targetRotZ - currentRotZ) * 0.095;
+
+            updatePlanRoll(currentRoll); planGroup.position.set(currentX, currentY, 0);
+            planGroup.rotation.x = BASE_ROT_X + Math.sin(elapsedTime * 0.35) * 0.02; planGroup.rotation.y = BASE_ROT_Y + Math.sin(elapsedTime * 0.28) * 0.025; planGroup.rotation.z = -currentRotZ; 
+            contactShadow.material.opacity = 0.55 + (1 - currentRoll) * 0.15; renderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+    </script>
+
+    <script>
+        const menuBtnNode = document.querySelector('.menu-btn');
+        const fullscreenMenu = document.getElementById('fullscreenMenu');
+        const closeMenuBtn = document.querySelector('.close-menu-btn');
+        
+        function chiudiMenu() { fullscreenMenu.classList.remove('open'); menuBtnNode.classList.remove('is-open'); }
+        menuBtnNode.addEventListener('click', () => { if (fullscreenMenu.classList.contains('open')) { chiudiMenu(); } else { fullscreenMenu.classList.add('open'); menuBtnNode.classList.add('is-open'); } });
+        closeMenuBtn.addEventListener('click', chiudiMenu);
+
+        // Gestione click sui link del menu per scroll fluido verso le sezioni
+        const menuLinks = document.querySelectorAll('.menu-link'); 
+        menuLinks.forEach(link => { 
+            link.addEventListener('click', (e) => { 
+                chiudiMenu(); 
+                const targetId = link.getAttribute('href');
+                if (targetId && targetId.startsWith('#')) {
+                    const targetEl = document.querySelector(targetId);
+                    if (targetEl) {
+                        e.preventDefault();
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }); 
+        });
+
+        document.getElementById('btnCondominioHome').addEventListener('click', (e) => {
+            e.preventDefault();
+            const sec = document.getElementById('servizi3d');
+            if (sec) {
+                const totalScrollable = sec.offsetHeight - window.innerHeight;
+                window.scrollTo({ top: sec.offsetTop + (totalScrollable * 0.29), behavior: 'smooth' });
+            }
+        });
+
+        document.getElementById('btnIngegneriaHome').addEventListener('click', (e) => {
+            e.preventDefault();
+            const sec = document.getElementById('servizi3d');
+            if (sec) {
+                const totalScrollable = sec.offsetHeight - window.innerHeight;
+                window.scrollTo({ top: sec.offsetTop + (totalScrollable * 0.87), behavior: 'smooth' });
+            }
+        });
+
+        /* GESTIONE FILE PER ENTRAMBE LE MODALI */
+        const MAX_TOTAL_SIZE = Infinity;
+        const submitBtnModal = document.getElementById('btnSubmitModal');
+
+        function setupFileHandler(inputId, listContainerId, warningId, statusInputId) {
+            let selectedFiles = [];
+            const fileInput = document.getElementById(inputId);
+            const fileListContainer = document.getElementById(listContainerId);
+            const fileSizeWarning = document.getElementById(warningId);
+            const allegatiStatusInput = document.getElementById(statusInputId);
+
+            if (!fileInput) return { clear: () => {} };
+
+            fileInput.addEventListener('change', (e) => {
+                const newFiles = Array.from(e.target.files);
+                selectedFiles = selectedFiles.concat(newFiles);
+                updateUI();
+            });
+
+            function updateUI() {
+                fileListContainer.innerHTML = '';
+                let totalBytes = selectedFiles.reduce((acc, file) => acc + file.size, 0);
+
+                if (allegatiStatusInput) {
+                    allegatiStatusInput.value = selectedFiles.length > 0 ? `Sì (${selectedFiles.length} file allegati)` : "Nessun allegato";
+                }
+
+                if (totalBytes > MAX_TOTAL_SIZE) {
+                    fileSizeWarning.style.display = 'block';
+                    submitBtnModal.disabled = true;
+                    submitBtnModal.style.opacity = '0.5';
+                    submitBtnModal.style.cursor = 'not-allowed';
+                } else {
+                    fileSizeWarning.style.display = 'none';
+                    submitBtnModal.disabled = false;
+                    submitBtnModal.style.opacity = '1';
+                    submitBtnModal.style.cursor = 'pointer';
+                }
+
+                selectedFiles.forEach((file, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'file-item';
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'file-name';
+                    const fileMb = (file.size / (1024 * 1024)).toFixed(2);
+                    nameSpan.textContent = `${file.name} (${fileMb} MB)`;
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'file-remove-btn';
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.title = 'Rimuovi file';
+                    removeBtn.onclick = () => {
+                        selectedFiles.splice(index, 1);
+                        updateUI();
+                        updateInputFilesList();
+                    };
+
+                    item.appendChild(nameSpan);
+                    item.appendChild(removeBtn);
+                    fileListContainer.appendChild(item);
+                });
+                updateInputFilesList();
+            }
+
+            function updateInputFilesList() {
+                const dataTransfer = new DataTransfer();
+                selectedFiles.forEach(file => dataTransfer.items.add(file));
+                fileInput.files = dataTransfer.files;
+            }
+
+            return {
+                clear: () => {
+                    selectedFiles = [];
+                    updateUI();
+                }
+            };
+        }
+
+        const uploaderCondominio = setupFileHandler('fileCondominio', 'fileListContainerC', 'fileSizeWarningC', 'allegatiStatusC');
+        const uploaderIngegneria = setupFileHandler('fileIng', 'fileListContainer', 'fileSizeWarning', 'allegatiStatus');
+
+        /* SCRIPT MODALE PREVENTIVI */
+        function openModal(type) {
+            const modal = document.getElementById('preventivoModal');
+            const title = document.getElementById('modalTitle');
+            const campiCondominio = document.getElementById('campiCondominio');
+            const campiIngegneria = document.getElementById('campiIngegneria');
+
+            if (type === 'condominio') {
+                title.innerText = 'Preventivo Condominiale';
+                campiCondominio.style.display = 'block';
+                campiIngegneria.style.display = 'none';
+            } else if (type === 'ingegneria') {
+                title.innerText = 'Richiesta Preventivo Ingegneria';
+                campiCondominio.style.display = 'none';
+                campiIngegneria.style.display = 'block';
+            }
+
+            // Disabilito i campi della sezione non attiva (esclusi da validazione e da FormData/EmailJS)
+            // e riabilito quelli della sezione attiva
+            campiCondominio.querySelectorAll('input, select, textarea').forEach(el => {
+                el.disabled = (type !== 'condominio');
+            });
+            campiIngegneria.querySelectorAll('input, select, textarea').forEach(el => {
+                el.disabled = (type !== 'ingegneria');
+            });
+
+            modal.classList.add('open');
+            document.body.classList.add('modal-open');
+            showFormView();
+        }
+
+        // Torna alla vista del modulo (usata all'apertura modale e dal bottone "Torna al modulo")
+        function showFormView() {
+            document.getElementById('modalFormView').style.display = 'block';
+            document.getElementById('modalSuccessView').style.display = 'none';
+            document.getElementById('modalErrorView').style.display = 'none';
+        }
+
+        function closeModal() {
+            document.getElementById('preventivoModal').classList.remove('open');
+            document.body.classList.remove('modal-open');
+        }
+
+        document.querySelector('.modal-content').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        document.getElementById('preventivoModal').addEventListener('click', closeModal);
+    </script>
+
+    <!-- SCRIPT BANNER COOKIE -->
+    <script>
+    (function () {
+        function handleCookieChoice(choice) {
+            localStorage.setItem('cookieConsent', choice);
+            document.getElementById('cookieBanner').classList.remove('show');
+        }
+        window.handleCookieChoice = handleCookieChoice;
+
+        window.addEventListener('DOMContentLoaded', function () {
+            var consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                // Se il banner è già stato mostrato in questa sessione (es. l'utente
+                // è tornato da un'altra pagina del sito, come l'informativa privacy),
+                // ricompare subito, senza fargli aspettare di nuovo 1.5s.
+                var alreadyShown = sessionStorage.getItem('cookieBannerShown');
+                var delay = alreadyShown ? 0 : 1500;
+                setTimeout(function () {
+                    document.getElementById('cookieBanner').classList.add('show');
+                    sessionStorage.setItem('cookieBannerShown', '1');
+                }, delay);
+            }
+        });
+    })();
+    </script>
+
+    <!-- SCRIPT SEZIONE SERVIZI: SCROLLYTELLING PALAZZO PNG E BOTTONI -->
+    <script>
+    (function () {
+        const introEl = document.getElementById('servizi');
+        const sectionEl = document.getElementById('servizi3d');
+        const buildingTrack = document.getElementById('buildingTrack');
+        
+        const colCondominio = document.getElementById('colCondominio');
+        const colIngegneria = document.getElementById('colIngegneria');
+        
+        const leftItems = Array.from(document.querySelectorAll('#listCondominio li'));
+        const rightItems = Array.from(document.querySelectorAll('#listIngegneria li'));
+        
+        const btnPrevCondominio = document.getElementById('btnPreventivoCondominio');
+        const btnPrevIngegneria = document.getElementById('btnPreventivoIngegneria');
+
+        if (!sectionEl) return;
+
+        if (introEl) {
+            const introObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        introEl.classList.add('visible');
+                        introObserver.disconnect();
+                    }
+                });
+            }, { threshold: 0.3 });
+            introObserver.observe(introEl);
+        }
+
+        function computeProgressServizi() {
+            const rect = sectionEl.getBoundingClientRect();
+            const totalScrollable = rect.height - window.innerHeight;
+            if (totalScrollable <= 0) return;
+            
+            const scrolled = -rect.top;
+            const p = Math.min(Math.max(scrolled / totalScrollable, 0), 1);
+
+            const translateVh = -(p * 12);
+            const scaleStart = 1.12;
+            const scale = scaleStart - (scaleStart - 1) * p;
+            
+            if (buildingTrack) {
+                buildingTrack.style.transform = `translate(-50%, ${translateVh}vh) scale(${scale})`;
+            }
+
+            // Sotto i 992px le due colonne sono impilate una sopra l'altra
+            // (vedi CSS): su mobile vogliamo quindi che compaia sempre e solo
+            // una branca alla volta, mai sovrapposte. Sopra i 992px (desktop)
+            // questa variabile è sempre false e il comportamento resta
+            // identico a prima.
+            const isStackedMobile = window.innerWidth <= 992;
+
+            // FASE 1: COMPARSA CONDOMINIO
+            const condTitleThreshold = 0.10;
+            const condominioAttiva = p > condTitleThreshold && !(isStackedMobile && p >= 0.35);
+            colCondominio.style.opacity = condominioAttiva ? 1 : 0;
+            leftItems.forEach((li, i) => {
+                const threshold = condTitleThreshold + (i / leftItems.length) * 0.15;
+                li.classList.toggle('visible', condominioAttiva && p > threshold);
+            });
+            if (p > condTitleThreshold + 0.17 && condominioAttiva) btnPrevCondominio.classList.add('visible'); 
+            else btnPrevCondominio.classList.remove('visible');
+
+            // FASE 2: COMPARSA INGEGNERIA
+            if (p >= 0.35) {
+                colIngegneria.style.opacity = 1;
+                rightItems.forEach((li, i) => {
+                    const threshold = 0.35 + ((i / rightItems.length) * 0.45);
+                    li.classList.toggle('visible', p > threshold);
+                });
+            } else {
+                colIngegneria.style.opacity = 0;
+                rightItems.forEach(li => li.classList.remove('visible'));
+            }
+            if (p > 0.85) btnPrevIngegneria.classList.add('visible'); 
+            else btnPrevIngegneria.classList.remove('visible');
+        }
+
+        window.addEventListener('scroll', computeProgressServizi, { passive: true });
+        window.addEventListener('resize', computeProgressServizi, { passive: true });
+        computeProgressServizi();
+
+    })();
+    </script>
+
+    <!-- SCRIPT AGGIORNAMENTO AUTOMATICO URL IN BASE ALLA SEZIONE VISIBILE -->
+    <script>
+    (function () {
+        const sections = [
+            { id: 'home', el: document.getElementById('home') },
+            { id: 'chi-siamo', el: document.getElementById('chi-siamo') },
+            { id: 'servizi', el: document.getElementById('servizi') },
+            { id: 'servizi', el: document.getElementById('servizi3d') },
+            { id: 'contatti', el: document.getElementById('contatti') }
+        ];
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-30% 0px -50% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let targetId = entry.target.id;
+                    if (targetId === 'servizi3d') {
+                        targetId = 'servizi';
+                    }
+                    const newHash = '#' + targetId;
+                    if (window.location.hash !== newHash) {
+                        history.replaceState(null, null, newHash);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(item => {
+            if (item.el) observer.observe(item.el);
+        });
+    })();
+    </script>
+
+    <script>
+    // --- VARIABILI DA CONFIGURARE ---
+    const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbycviq_f76hKMmGARg4MgcYTmPAQdgNm0a6df7BViH_pW8ZK9JudYBMJD1WYMnGfGvDWQ/exec";
+    
+    // Configurazione EmailJS (usa i tuoi Service ID e Template ID)
+    const EMAILJS_SERVICE_ID = "service_5albx2f";
+    const EMAILJS_TEMPLATE_ID_CONDOMINIO = "template_82jqe2g";
+    const EMAILJS_TEMPLATE_ID_INGEGNERIA = "template_a9yato7";
+    // --------------------------------
+
+    // Funzione helper per leggere i file in Base64
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                // Rimuovo il prefisso "data:image/jpeg;base64," per tenere solo i dati grezzi
+                let encoded = reader.result.toString().replace(/^data:(.*,)?/, '');
+                resolve({
+                    name: file.name,
+                    mimeType: file.type || 'application/octet-stream',
+                    base64: encoded
+                });
+            };
+            reader.onerror = error => reject(error);
+        });
+    };
+
+    document.getElementById('preventivoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const btnSubmit = document.getElementById('btnSubmitModal');
+        const originalBtnText = btnSubmit.innerText;
+        btnSubmit.innerText = "Caricamento in corso... attendere";
+        btnSubmit.disabled = true;
+
+        try {
+            // 1. Determino quale sezione del form è attiva (Condominio o Ingegneria)
+            const isCondominio = document.getElementById('campiCondominio').style.display !== 'none';
+            const suffix = isCondominio ? 'Condominio' : 'Ing'; // Usa il suffisso corretto per pescare gli ID
+            const categoria = isCondominio ? 'condominio' : 'ingegneria';
+            
+            // 2. Prendo i dati utente
+            const nomeCliente = document.getElementById('nome' + (isCondominio ? 'Condominio' : 'Ing')).value;
+            
+            // 3. Prendo i file dall'input corretto
+            const fileInput = document.getElementById(isCondominio ? 'fileCondominio' : 'fileIng');
+            const files = fileInput.files;
+            
+            let filesArray = [];
+
+            // 4. Se ci sono file, li converto in base64
+            if (files.length > 0) {
+                btnSubmit.innerText = "Preparazione file in corso...";
+                const filePromises = Array.from(files).map(file => getBase64(file));
+                filesArray = await Promise.all(filePromises);
+                
+                // 5. Invio i file a Google Apps Script
+                btnSubmit.innerText = "Invio file...";
+                
+                const payload = {
+                    nomeCliente: nomeCliente,
+                    categoria: categoria,
+                    files: filesArray
+                };
+
+                const driveResponse = await fetch(APPS_SCRIPT_WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                    // Non impostiamo headers 'Content-Type' per evitare i blocchi preflight CORS del browser
+                });
+
+                const driveResult = await driveResponse.json();
+                
+                if (driveResult.status !== 'success') {
+                    throw new Error("Errore durante il salvataggio su Drive: " + driveResult.message);
+                }
+                
+                // Opzionale: puoi salvare il link della cartella per mandarlo anche nella mail
+                document.getElementById('allegatiStatus' + (isCondominio ? 'C' : '')).value = "File salvati in: " + driveResult.cartellaClienteUrl;
+            }
+
+            // 6. Invio i dati testuali tramite EmailJS
+            btnSubmit.innerText = "Invio email...";
+            
+            const emailjsTemplateId = isCondominio ? EMAILJS_TEMPLATE_ID_CONDOMINIO : EMAILJS_TEMPLATE_ID_INGEGNERIA;
+            await emailjs.sendForm(EMAILJS_SERVICE_ID, emailjsTemplateId, this);
+
+            // 7. Successo
+            const categoriaLabel = isCondominio ? 'condominiale' : 'di ingegneria';
+            document.getElementById('modalSuccessMessage').innerText =
+                `Grazie per averci contattato. La tua richiesta ${categoriaLabel} è stata inoltrata, ti risponderemo al più presto.`;
+            document.getElementById('modalFormView').style.display = 'none';
+            document.getElementById('modalSuccessView').style.display = 'block';
+            this.reset(); // Svuota il form
+            uploaderCondominio.clear();
+            uploaderIngegneria.clear();
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById('modalErrorMessage').innerText =
+                "Si è verificato un errore durante l'invio: " + error.message + ". Riprova più tardi o contattaci direttamente.";
+            document.getElementById('modalFormView').style.display = 'none';
+            document.getElementById('modalErrorView').style.display = 'block';
+        } finally {
+            // Ripristino il bottone
+            btnSubmit.innerText = originalBtnText;
+            btnSubmit.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
