@@ -927,6 +927,10 @@
             object-fit: contain;
         }
 
+        .footer-mobile-logo {
+            display: none;
+        }
+
         .footer-content {
             position: relative;
             z-index: 2;
@@ -1188,21 +1192,14 @@
                 flex-direction: column;
                 gap: 0;
                 width: 100%;
-                padding-top: 150px;
             }
-            .footer-right::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 160px;
-                height: 130px;
-                background-image: url('logobianco.png');
-                background-repeat: no-repeat;
-                background-position: center top;
-                background-size: contain;
-                opacity: 0.9;
+            .footer-mobile-logo {
+                display: block;
+                width: 420px;
+                max-width: 80vw;
+                height: auto;
+                margin: 20px auto;
+                opacity: 0.05;
             }
             .footer-info-block {
                 padding: 18px 0;
@@ -1941,6 +1938,8 @@
                 </div>
             </div>
             
+            <img src="logobianco.png" alt="F.A. SRL Logo" class="footer-mobile-logo">
+
             <div class="footer-right">
                 <div class="footer-info-block">
                     <h4>SEDE LEGALE E OPERATIVA</h4>
