@@ -732,7 +732,7 @@
                 padding: 40px 24px 20px;
             }
             .servizi-3d {
-                height: 320vh;
+                height: 420vh;
             }
             .building-scroll-track {
                 opacity: 0.95;
@@ -753,7 +753,7 @@
                 transform: translate(-50%, -50%);
                 padding: 30px 20px;
                 border-radius: 24px;
-                background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.4) 45%, rgba(255, 255, 255, 0) 75%);
+                background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0) 78%);
             }
             .servizi-col-left, .servizi-col-right {
                 text-align: center;
@@ -764,9 +764,11 @@
                 text-shadow:
                     0 0 6px #ffffff,
                     0 0 12px #ffffff,
-                    0 0 20px rgba(255, 255, 255, 0.95),
-                    0 0 34px rgba(255, 255, 255, 0.9),
-                    0 0 55px rgba(255, 255, 255, 0.75);
+                    0 0 20px #ffffff,
+                    0 0 34px #ffffff,
+                    0 0 55px #ffffff,
+                    0 0 80px rgba(255, 255, 255, 0.9),
+                    0 0 110px rgba(255, 255, 255, 0.8);
             }
             .servizi-col-left .servizi-list, .servizi-col-right .servizi-list {
                 align-items: center;
@@ -781,9 +783,11 @@
             .btn-preventivo {
                 box-shadow:
                     0 0 10px #ffffff,
-                    0 0 20px rgba(255, 255, 255, 0.95),
-                    0 0 36px rgba(255, 255, 255, 0.8),
-                    0 0 60px rgba(255, 255, 255, 0.6);
+                    0 0 20px #ffffff,
+                    0 0 36px #ffffff,
+                    0 0 60px #ffffff,
+                    0 0 90px rgba(255, 255, 255, 0.9),
+                    0 0 130px rgba(255, 255, 255, 0.75);
             }
         }
 
@@ -2763,14 +2767,21 @@
 
             // Sotto i 992px le due colonne sono impilate una sopra l'altra
             // (vedi CSS): su mobile vogliamo quindi che compaia sempre e solo
-            // una branca alla volta, mai sovrapposte. Sopra i 992px (desktop)
-            // questa variabile è sempre false e il comportamento resta
-            // identico a prima.
+            // una branca alla volta, mai sovrapposte, e con uno spazio vuoto
+            // tra le due fasi in cui si vede solo il grattacielo, cosi da
+            // sfruttare meglio l'altezza dell'immagine. Sopra i 992px
+            // (desktop) questa variabile è sempre false e il comportamento
+            // resta identico a prima.
             const isStackedMobile = window.innerWidth <= 992;
+
+            // Su mobile: Condominio visibile 0.10 -> 0.30, spazio vuoto
+            // 0.30 -> 0.45 (solo grattacielo), Ingegneria 0.45 -> 1.
+            const condEndMobile = 0.30;
+            const ingStartMobile = 0.45;
 
             // FASE 1: COMPARSA CONDOMINIO
             const condTitleThreshold = 0.10;
-            const condominioAttiva = p > condTitleThreshold && !(isStackedMobile && p >= 0.35);
+            const condominioAttiva = p > condTitleThreshold && !(isStackedMobile && p >= condEndMobile);
             colCondominio.style.opacity = condominioAttiva ? 1 : 0;
             leftItems.forEach((li, i) => {
                 const threshold = condTitleThreshold + (i / leftItems.length) * 0.15;
@@ -2780,10 +2791,11 @@
             else btnPrevCondominio.classList.remove('visible');
 
             // FASE 2: COMPARSA INGEGNERIA
-            if (p >= 0.35) {
+            const ingStart = isStackedMobile ? ingStartMobile : 0.35;
+            if (p >= ingStart) {
                 colIngegneria.style.opacity = 1;
                 rightItems.forEach((li, i) => {
-                    const threshold = 0.35 + ((i / rightItems.length) * 0.45);
+                    const threshold = ingStart + ((i / rightItems.length) * 0.45);
                     li.classList.toggle('visible', p > threshold);
                 });
             } else {
