@@ -1609,8 +1609,21 @@
                 padding: 0 22px;
             }
 
+            /* --- Home: non più incastrata in 100vh, ma libera di
+               estendersi in verticale con più respiro tra logo e titolo --- */
+            #home {
+                height: auto;
+                min-height: 100vh;
+                padding: 150px 22px 90px;
+            }
+
             .hero-title-wrap {
                 margin-top: 0;
+                gap: 48px;
+            }
+
+            .logo-inline {
+                height: clamp(120px, 20vw, 165px);
             }
 
             /* Decorazioni fogli/matita/compasso: rimpicciolite per non invadere il testo */
