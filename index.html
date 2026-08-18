@@ -85,11 +85,18 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
         body {
             background-color: #1417ce; 
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             overflow-x: hidden;
+            max-width: 100%;
+            overscroll-behavior-x: none;
         }
 
         /* Classe per bloccare lo scroll del body quando la modale è aperta */
@@ -1626,8 +1633,15 @@
                 height: clamp(120px, 20vw, 165px);
             }
 
-            /* Decorazioni fogli/matita/compasso: stessa dimensione del desktop,
-               niente più scale(0.5) che le rimpiccioliva e nascondeva */
+            /* Decorazioni fogli/matita/compasso: via di mezzo tra la versione
+               originale (0.5, troppo piccola) e quella piena del desktop (1) */
+            .sheets-corner--left,
+            .sheets-corner--right {
+                transform: scale(0.75);
+            }
+
+            .sheets-corner--left { transform-origin: top left; }
+            .sheets-corner--right { transform-origin: top right; }
 
             /* --- Chi Siamo --- */
             #chi-siamo {
