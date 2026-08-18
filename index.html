@@ -740,10 +740,12 @@
             }
             .servizi-3d {
                 height: 420vh;
+                margin-top: -110px;
             }
             .building-scroll-track {
                 opacity: 0.95;
                 transition: transform 0.1s linear;
+                top: -95%;
             }
             .servizi-columns {
                 flex-direction: column;
@@ -754,12 +756,13 @@
             }
             /* Le card non stanno più centrate sopra l'immagine: quando il
                grattacielo scorre verso sinistra, il testo occupa lo spazio
-               libero a destra (poco più di metà larghezza schermo) */
+               libero a destra (poco più di metà larghezza schermo).
+               top spostato più in alto rispetto al centro schermo. */
             .servizi-col {
                 position: absolute;
                 width: 58%;
                 max-width: 360px;
-                top: 50%;
+                top: 40%;
                 left: auto;
                 right: 20px;
                 transform: translateY(-50%);
@@ -1643,10 +1646,10 @@
                 justify-content: center;
             }
 
-            /* --- Servizi: intro (spazio ridotto ancora prima del titolo) --- */
+            /* --- Servizi: intro (posizione originale, non si tocca) --- */
             .servizi-intro {
-                margin-top: 10px;
-                padding: 20px 22px 0;
+                margin-top: 40px;
+                padding: 50px 22px 0;
             }
 
             /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
