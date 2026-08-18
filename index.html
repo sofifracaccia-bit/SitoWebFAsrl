@@ -1610,30 +1610,24 @@
             }
 
             /* --- Home: non più incastrata in 100vh, ma libera di
-               estendersi in verticale con più respiro tra logo e titolo --- */
+               estendersi in verticale con un po' più di respiro --- */
             #home {
                 height: auto;
                 min-height: 100vh;
-                padding: 150px 22px 90px;
+                padding: 110px 22px 60px;
             }
 
             .hero-title-wrap {
                 margin-top: 0;
-                gap: 48px;
+                gap: 28px;
             }
 
             .logo-inline {
                 height: clamp(120px, 20vw, 165px);
             }
 
-            /* Decorazioni fogli/matita/compasso: rimpicciolite per non invadere il testo */
-            .sheets-corner--left,
-            .sheets-corner--right {
-                transform: scale(0.5);
-            }
-
-            .sheets-corner--left { transform-origin: top left; }
-            .sheets-corner--right { transform-origin: top right; }
+            /* Decorazioni fogli/matita/compasso: stessa dimensione del desktop,
+               niente più scale(0.5) che le rimpiccioliva e nascondeva */
 
             /* --- Chi Siamo --- */
             #chi-siamo {
