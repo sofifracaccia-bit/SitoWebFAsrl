@@ -1643,11 +1643,10 @@
                 justify-content: center;
             }
 
-            /* --- Servizi: intro (spazio ridotto prima del titolo, cosi
-               si arriva prima al grattacielo scrollando) --- */
+            /* --- Servizi: intro (spazio ridotto ancora prima del titolo) --- */
             .servizi-intro {
-                margin-top: 40px;
-                padding: 50px 22px 0;
+                margin-top: 10px;
+                padding: 20px 22px 0;
             }
 
             /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
@@ -2786,7 +2785,7 @@
             // tutto il resto dello scroll (non torna piu al centro).
             let translateXPercent = 0;
             if (isStackedMobile) {
-                const shiftAmount = -30; // % di spostamento a sinistra
+                const shiftAmount = -48; // % di spostamento a sinistra
                 const shiftInStart = condTitleThreshold, shiftInEnd = condTitleThreshold + 0.08;
 
                 if (p < shiftInStart) {
