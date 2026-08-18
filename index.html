@@ -1643,10 +1643,11 @@
                 justify-content: center;
             }
 
-            /* --- Servizi: intro --- */
+            /* --- Servizi: intro (spazio ridotto prima del titolo, cosi
+               si arriva prima al grattacielo scrollando) --- */
             .servizi-intro {
-                margin-top: 100px;
-                padding: 90px 22px 0;
+                margin-top: 40px;
+                padding: 50px 22px 0;
             }
 
             /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
@@ -2781,28 +2782,17 @@
 
             // Spostamento orizzontale del grattacielo su mobile: appena
             // compare il testo si sposta verso sinistra lasciando piu di
-            // meta schermo libero a destra per la card; nello spazio vuoto
-            // tra le due fasi torna al centro (si vede solo la cima
-            // dell'immagine, come subito dopo "I Nostri Servizi").
+            // meta schermo libero a destra per la card, e resta li per
+            // tutto il resto dello scroll (non torna piu al centro).
             let translateXPercent = 0;
             if (isStackedMobile) {
                 const shiftAmount = -30; // % di spostamento a sinistra
                 const shiftInStart = condTitleThreshold, shiftInEnd = condTitleThreshold + 0.08;
-                const shiftOutStart = condEndMobile, shiftOutEnd = condEndMobile + 0.08;
-                const shiftBackInStart = ingStartMobile - 0.08, shiftBackInEnd = ingStartMobile;
 
                 if (p < shiftInStart) {
                     translateXPercent = 0;
                 } else if (p < shiftInEnd) {
                     translateXPercent = shiftAmount * ((p - shiftInStart) / (shiftInEnd - shiftInStart));
-                } else if (p < shiftOutStart) {
-                    translateXPercent = shiftAmount;
-                } else if (p < shiftOutEnd) {
-                    translateXPercent = shiftAmount * (1 - (p - shiftOutStart) / (shiftOutEnd - shiftOutStart));
-                } else if (p < shiftBackInStart) {
-                    translateXPercent = 0;
-                } else if (p < shiftBackInEnd) {
-                    translateXPercent = shiftAmount * ((p - shiftBackInStart) / (shiftBackInEnd - shiftBackInStart));
                 } else {
                     translateXPercent = shiftAmount;
                 }
