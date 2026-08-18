@@ -743,42 +743,33 @@
             }
             .building-scroll-track {
                 opacity: 0.95;
+                transition: transform 0.1s linear;
             }
             .servizi-columns {
                 flex-direction: column;
                 justify-content: center;
                 gap: 0;
-                padding: 0 24px;
+                padding: 0;
                 height: 100vh;
             }
+            /* Le card non stanno più centrate sopra l'immagine: quando il
+               grattacielo scorre verso sinistra, il testo occupa lo spazio
+               libero a destra (poco più di metà larghezza schermo) */
             .servizi-col {
                 position: absolute;
-                width: 100%;
-                max-width: 440px;
+                width: 58%;
+                max-width: 360px;
                 top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                padding: 30px 20px;
-                border-radius: 24px;
-                background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0) 78%);
+                left: auto;
+                right: 20px;
+                transform: translateY(-50%);
+                padding: 0;
             }
             .servizi-col-left, .servizi-col-right {
-                text-align: center;
-            }
-            .servizi-col-header .subtitle,
-            .servizi-col-header h3,
-            .servizi-list li {
-                text-shadow:
-                    0 0 6px #ffffff,
-                    0 0 12px #ffffff,
-                    0 0 20px #ffffff,
-                    0 0 34px #ffffff,
-                    0 0 55px #ffffff,
-                    0 0 80px rgba(255, 255, 255, 0.9),
-                    0 0 110px rgba(255, 255, 255, 0.8);
+                text-align: left;
             }
             .servizi-col-left .servizi-list, .servizi-col-right .servizi-list {
-                align-items: center;
+                align-items: flex-start;
             }
             .servizi-list li {
                 max-width: 100%;
@@ -786,15 +777,6 @@
             }
             .servizi-list li::before {
                 display: none;
-            }
-            .btn-preventivo {
-                box-shadow:
-                    0 0 10px #ffffff,
-                    0 0 20px #ffffff,
-                    0 0 36px #ffffff,
-                    0 0 60px #ffffff,
-                    0 0 90px rgba(255, 255, 255, 0.9),
-                    0 0 130px rgba(255, 255, 255, 0.75);
             }
         }
 
@@ -2781,10 +2763,6 @@
             const translateVh = -(p * 12);
             const scaleStart = 1.12;
             const scale = scaleStart - (scaleStart - 1) * p;
-            
-            if (buildingTrack) {
-                buildingTrack.style.transform = `translate(-50%, ${translateVh}vh) scale(${scale})`;
-            }
 
             // Sotto i 992px le due colonne sono impilate una sopra l'altra
             // (vedi CSS): su mobile vogliamo quindi che compaia sempre e solo
@@ -2797,11 +2775,43 @@
 
             // Su mobile: Condominio visibile 0.10 -> 0.30, spazio vuoto
             // 0.30 -> 0.45 (solo grattacielo), Ingegneria 0.45 -> 1.
+            const condTitleThreshold = 0.10;
             const condEndMobile = 0.30;
             const ingStartMobile = 0.45;
 
-            // FASE 1: COMPARSA CONDOMINIO
-            const condTitleThreshold = 0.10;
+            // Spostamento orizzontale del grattacielo su mobile: appena
+            // compare il testo si sposta verso sinistra lasciando piu di
+            // meta schermo libero a destra per la card; nello spazio vuoto
+            // tra le due fasi torna al centro (si vede solo la cima
+            // dell'immagine, come subito dopo "I Nostri Servizi").
+            let translateXPercent = 0;
+            if (isStackedMobile) {
+                const shiftAmount = -30; // % di spostamento a sinistra
+                const shiftInStart = condTitleThreshold, shiftInEnd = condTitleThreshold + 0.08;
+                const shiftOutStart = condEndMobile, shiftOutEnd = condEndMobile + 0.08;
+                const shiftBackInStart = ingStartMobile - 0.08, shiftBackInEnd = ingStartMobile;
+
+                if (p < shiftInStart) {
+                    translateXPercent = 0;
+                } else if (p < shiftInEnd) {
+                    translateXPercent = shiftAmount * ((p - shiftInStart) / (shiftInEnd - shiftInStart));
+                } else if (p < shiftOutStart) {
+                    translateXPercent = shiftAmount;
+                } else if (p < shiftOutEnd) {
+                    translateXPercent = shiftAmount * (1 - (p - shiftOutStart) / (shiftOutEnd - shiftOutStart));
+                } else if (p < shiftBackInStart) {
+                    translateXPercent = 0;
+                } else if (p < shiftBackInEnd) {
+                    translateXPercent = shiftAmount * ((p - shiftBackInStart) / (shiftBackInEnd - shiftBackInStart));
+                } else {
+                    translateXPercent = shiftAmount;
+                }
+            }
+
+            if (buildingTrack) {
+                buildingTrack.style.transform = `translate(calc(-50% + ${translateXPercent}%), ${translateVh}vh) scale(${scale})`;
+            }
+
             const condominioAttiva = p > condTitleThreshold && !(isStackedMobile && p >= condEndMobile);
             colCondominio.style.opacity = condominioAttiva ? 1 : 0;
             leftItems.forEach((li, i) => {
