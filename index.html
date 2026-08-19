@@ -419,21 +419,6 @@
             background-color: #1417ce;
         }
 
-        /* Vignette speculare a quella della home, in cima a Chi Siamo:
-           ombra leggera in alto che sfuma verso il trasparente scendendo,
-           dissolvenza sincronizzata via JS con l'opacità della vignette
-           della home, per dare continuità nel passaggio tra le due sezioni. */
-        .chi-siamo-top-vignette {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 260px;
-            background: linear-gradient(to bottom, rgba(8, 18, 34, 0.4) 0%, rgba(8, 18, 34, 0) 100%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
         /* Estende il blu di Chi Siamo dentro il gap (margin-top) prima del
            box bianco di "I Nostri Servizi", cosi il lembo di blu che c'era
            prima (quando lo sfondo default del sito era blu) resta identico,
@@ -835,7 +820,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0;
+            z-index: 1;
             pointer-events: none;
             background: radial-gradient(ellipse at center, rgba(12,27,51,0) 25%, #081222 92%);
             transition: opacity 0.4s ease;
@@ -1934,7 +1919,6 @@
     </section>
 
     <section id="chi-siamo">
-        <div class="chi-siamo-top-vignette" id="chiSiamoVignette"></div>
         <div class="about-content">
             <h2>Siamo una società nata nel 2026, fondata sull'esperienza e pronta a ridefinire il settore con idee innovative e soluzioni su misura.</h2>
             <div class="chi-siamo-tags" id="chiSiamoTags">
@@ -2367,7 +2351,6 @@
     <script>
         const scrollIndicator = document.getElementById('scrollIndicator');
         const heroVignette = document.getElementById('heroVignette');
-        const chiSiamoVignette = document.getElementById('chiSiamoVignette');
         const chiSiamoTags = document.getElementById('chiSiamoTags');
         const menuBtnEl = document.querySelector('.menu-btn');
         const serviziIntroEl = document.getElementById('servizi');
@@ -2381,10 +2364,10 @@
             const sp = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
             const sp2 = Math.min(Math.max((window.scrollY - window.innerHeight) / window.innerHeight, 0), 1);
             
-            heroVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
-            if (chiSiamoVignette) {
-                chiSiamoVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
-            }
+            // L'ombra della home si dissolve durante il passaggio verso Chi
+            // Siamo, cosi da essere già sparita quando la sezione Chi Siamo
+            // è pienamente visibile (nessuna ombra residua al suo interno).
+            heroVignette.style.opacity = String(Math.max(0, 1 - sp));
             chiSiamoTags.classList.toggle('visible', sp > 0.55);
             menuBtnEl.style.opacity = sp > 0.5 ? '1' : '0';
             menuBtnEl.style.pointerEvents = sp > 0.5 ? 'auto' : 'none';
