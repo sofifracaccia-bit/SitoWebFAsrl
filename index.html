@@ -398,10 +398,6 @@
             overflow: visible;
         }
 
-        .hero-svg-title--mobile {
-            display: none;
-        }
-
         #chi-siamo {
             justify-content: space-between;
             height: 115vh;
@@ -1620,15 +1616,13 @@
 
             .logo-inline {
                 height: clamp(120px, 20vw, 165px);
+                transform: translateY(-24px);
             }
 
-            /* Titolo hero: su mobile mostriamo la versione più sviluppata
-               in verticale al posto di quella desktop */
-            .hero-svg-title--desktop {
-                display: none;
-            }
-            .hero-svg-title--mobile {
-                display: block;
+            /* Titolo hero: viewBox tornato a 300 (come desktop), spostato
+               in alto della stessa quantità del logo */
+            .hero-svg-title {
+                transform: translateY(-24px);
             }
 
             /* Decorazioni fogli/matita/compasso: via di mezzo tra la versione
@@ -1876,22 +1870,11 @@
     <section id="home">
         <div class="hero-title-wrap">
             <img src="logobianco.png" alt="F.A. SRL Logo" class="logo-inline">
-            <svg class="hero-svg-title hero-svg-title--desktop" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+            <svg class="hero-svg-title" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
                 <text x="450" y="90" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">AMMINISTRAZIONI</text>
                 <text x="450" y="181" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="104" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">CONDOMINIALI</text>
                 <rect x="25" y="195" width="850" height="4" fill="#ffffff" rx="2" />
                 <text x="450" y="270" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">SERVIZI DI INGEGNERIA</text>
-            </svg>
-            <!-- Versione mobile: stesse proporzioni orizzontali (textLength 850
-                 su viewBox largo 900, quindi stessa "larghezza" occupata),
-                 stessi font/pesi/colori, ma viewBox più alto e righe più
-                 distanziate: il titolo si sviluppa in verticale invece di
-                 apparire schiacciato e sottile. -->
-            <svg class="hero-svg-title hero-svg-title--mobile" viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg">
-                <text x="450" y="110" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="80" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">AMMINISTRAZIONI</text>
-                <text x="450" y="255" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="130" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">CONDOMINIALI</text>
-                <rect x="25" y="285" width="850" height="5" fill="#ffffff" rx="2.5" />
-                <text x="450" y="400" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="80" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">SERVIZI DI INGEGNERIA</text>
             </svg>
         </div>
     </section>
