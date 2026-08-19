@@ -91,7 +91,7 @@
         }
 
         body {
-            background-color: #1417ce; 
+            background-color: #ffffff; 
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             overflow-x: hidden;
@@ -381,6 +381,21 @@
             text-align: center;
         }
 
+        /* Sfondo blu di #home come pseudo-elemento con z-index negativo,
+           cosi la sfumatura/vignette (che è un div fisso sopra il body)
+           torna a essere visibile invece di restare coperta dallo sfondo
+           blu solido della sezione. */
+        #home::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background-color: #1417ce;
+            z-index: -1;
+        }
+
         .hero-title-wrap {
             display: flex;
             flex-direction: column;
@@ -401,6 +416,37 @@
         #chi-siamo {
             justify-content: space-between;
             height: 115vh;
+            background-color: #1417ce;
+        }
+
+        /* Vignette speculare a quella della home, in cima a Chi Siamo:
+           ombra leggera in alto che sfuma verso il trasparente scendendo,
+           dissolvenza sincronizzata via JS con l'opacità della vignette
+           della home, per dare continuità nel passaggio tra le due sezioni. */
+        .chi-siamo-top-vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(to bottom, rgba(8, 18, 34, 0.4) 0%, rgba(8, 18, 34, 0) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Estende il blu di Chi Siamo dentro il gap (margin-top) prima del
+           box bianco di "I Nostri Servizi", cosi il lembo di blu che c'era
+           prima (quando lo sfondo default del sito era blu) resta identico,
+           senza toccare spaziature o layout della sezione. */
+        #chi-siamo::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -150px;
+            width: 100%;
+            height: 150px;
+            background-color: #1417ce;
+            pointer-events: none;
         }
 
         .about-content {
@@ -1644,6 +1690,14 @@
                 text-align: center;
             }
 
+            /* Su mobile il gap prima di "I Nostri Servizi" è 65px (non
+               150px come sopra i 768px), quindi il lembo di blu va
+               ridotto di conseguenza */
+            #chi-siamo::after {
+                bottom: -65px;
+                height: 65px;
+            }
+
             .about-content {
                 max-width: 100%;
                 text-align: center;
@@ -1880,6 +1934,7 @@
     </section>
 
     <section id="chi-siamo">
+        <div class="chi-siamo-top-vignette" id="chiSiamoVignette"></div>
         <div class="about-content">
             <h2>Siamo una società nata nel 2026, fondata sull'esperienza e pronta a ridefinire il settore con idee innovative e soluzioni su misura.</h2>
             <div class="chi-siamo-tags" id="chiSiamoTags">
@@ -2312,6 +2367,7 @@
     <script>
         const scrollIndicator = document.getElementById('scrollIndicator');
         const heroVignette = document.getElementById('heroVignette');
+        const chiSiamoVignette = document.getElementById('chiSiamoVignette');
         const chiSiamoTags = document.getElementById('chiSiamoTags');
         const menuBtnEl = document.querySelector('.menu-btn');
         const serviziIntroEl = document.getElementById('servizi');
@@ -2326,6 +2382,9 @@
             const sp2 = Math.min(Math.max((window.scrollY - window.innerHeight) / window.innerHeight, 0), 1);
             
             heroVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
+            if (chiSiamoVignette) {
+                chiSiamoVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
+            }
             chiSiamoTags.classList.toggle('visible', sp > 0.55);
             menuBtnEl.style.opacity = sp > 0.5 ? '1' : '0';
             menuBtnEl.style.pointerEvents = sp > 0.5 ? 'auto' : 'none';
