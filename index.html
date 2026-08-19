@@ -757,7 +757,7 @@
             /* Le card non stanno più centrate sopra l'immagine: quando il
                grattacielo scorre verso sinistra, il testo occupa lo spazio
                libero a destra (poco più di metà larghezza schermo).
-               top spostato più in alto rispetto al centro schermo. */
+               Testo semplice come su desktop, senza sfondo/alone. */
             .servizi-col {
                 position: absolute;
                 width: 58%;
@@ -1646,10 +1646,12 @@
                 justify-content: center;
             }
 
-            /* --- Servizi: intro (posizione originale, non si tocca) --- */
+            /* --- Servizi: intro (via di mezzo tra blu originale (100px)
+               e il taglio netto di prima (40px): un po' di blu resta
+               visibile prima che inizi il bianco) --- */
             .servizi-intro {
-                margin-top: 40px;
-                padding: 50px 22px 0;
+                margin-top: 65px;
+                padding: 40px 22px 0;
             }
 
             /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
