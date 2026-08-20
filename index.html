@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>F.A. SRL - Ingegneria & Condomini</title>
 
     <!-- Importazione di Three.js per il 3D reale -->
@@ -85,11 +85,20 @@
             box-sizing: border-box;
         }
 
+        html {
+            background-color: #1417ce;
+            width: 100%;
+            overscroll-behavior-x: none;
+        }
+
         body {
             background-color: #1417ce; 
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            overscroll-behavior-x: none;
         }
 
         /* Classe per bloccare lo scroll del body quando la modale è aperta */
@@ -727,13 +736,6 @@
             transform: translateY(-2px);
         }
 
-        /* Indicatore di fase (Condominio/Ingegneria) per lo scrollytelling
-           mobile dei Servizi: nascosto di default, attivato solo sotto i
-           992px. Non altera nulla della versione desktop. */
-        .servizi-phase-nav {
-            display: none;
-        }
-
         @media (max-width: 992px) {
             .servizi-intro {
                 padding: 40px 24px 20px;
@@ -802,28 +804,6 @@
                 height: 8px;
                 border-radius: 50%;
                 background: #1417ce;
-            }
-            .servizi-phase-nav {
-                display: flex;
-                position: absolute;
-                left: 50%;
-                bottom: 30px;
-                transform: translateX(-50%);
-                z-index: 6;
-                gap: 10px;
-                pointer-events: none;
-            }
-            .phase-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: rgba(11, 17, 32, 0.18);
-                transition: background 0.4s ease, width 0.4s ease, border-radius 0.4s ease;
-            }
-            .phase-dot.active {
-                background: #1417ce;
-                width: 24px;
-                border-radius: 6px;
             }
         }
 
@@ -1736,10 +1716,6 @@
                 padding: 24px 18px;
             }
 
-            .servizi-phase-nav {
-                bottom: 22px;
-            }
-
             .footer-left h2 {
                 font-size: 32px;
             }
@@ -1989,12 +1965,6 @@
                     <button class="btn-preventivo" id="btnPreventivoIngegneria" onclick="openModal('ingegneria')">Richiedi Preventivo</button>
                 </div>
 
-            </div>
-
-            <!-- Indicatore di fase, visibile solo su mobile (vedi CSS) -->
-            <div class="servizi-phase-nav" id="serviziPhaseNav" aria-hidden="true">
-                <span class="phase-dot" id="phaseDotCondominio"></span>
-                <span class="phase-dot" id="phaseDotIngegneria"></span>
             </div>
         </div>
 
@@ -2793,9 +2763,6 @@
         const btnPrevCondominio = document.getElementById('btnPreventivoCondominio');
         const btnPrevIngegneria = document.getElementById('btnPreventivoIngegneria');
 
-        const phaseDotCondominio = document.getElementById('phaseDotCondominio');
-        const phaseDotIngegneria = document.getElementById('phaseDotIngegneria');
-
         if (!sectionEl) return;
 
         if (introEl) {
@@ -2906,12 +2873,6 @@
             const btnIngThreshold = isStackedMobile ? btnIngThresholdMobile : 0.85;
             if (p > btnIngThreshold) btnPrevIngegneria.classList.add('visible'); 
             else btnPrevIngegneria.classList.remove('visible');
-
-            // Indicatore di fase (solo mobile): mostra a che punto siamo
-            if (phaseDotCondominio && phaseDotIngegneria) {
-                phaseDotCondominio.classList.toggle('active', isStackedMobile && condominioAttiva);
-                phaseDotIngegneria.classList.toggle('active', isStackedMobile && ingegneriaAttiva);
-            }
         }
 
         window.addEventListener('scroll', computeProgressServizi, { passive: true });
