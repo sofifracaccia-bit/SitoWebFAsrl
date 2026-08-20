@@ -2831,11 +2831,19 @@
             // resta identico a prima.
             const isStackedMobile = window.innerWidth <= 992;
 
-            // Su mobile: Condominio visibile 0.10 -> 0.30, spazio vuoto
-            // 0.30 -> 0.45 (solo grattacielo), Ingegneria 0.45 -> 1.
+            // Su mobile: Condominio visibile 0.10 -> 0.50, spazio vuoto
+            // 0.50 -> 0.58 (solo grattacielo), Ingegneria 0.58 -> 1.
+            // (finestre allargate rispetto a prima: la card Condominio
+            // durava troppo poco e spariva prima che si potesse leggerla)
             const condTitleThreshold = 0.10;
-            const condEndMobile = 0.30;
-            const ingStartMobile = 0.45;
+            const condEndMobile = 0.50;
+            const ingStartMobile = 0.58;
+            // Scarti mobile-only per lo sfalsamento di voci/bottoni: sul
+            // desktop restano i valori originali (0.15 / 0.17 / 0.45 / 0.85)
+            const condItemsSpanMobile = 0.24;
+            const btnCondOffsetMobile = 0.32;
+            const ingItemsSpanMobile = 0.32;
+            const btnIngThresholdMobile = 0.90;
 
             // Spostamento orizzontale del grattacielo su mobile: appena
             // compare il testo si sposta verso sinistra lasciando piu di
@@ -2867,11 +2875,13 @@
                 colCondominio.style.opacity = condominioAttiva ? 1 : 0;
                 colCondominio.classList.remove('mobile-active');
             }
+            const condItemsSpan = isStackedMobile ? condItemsSpanMobile : 0.15;
             leftItems.forEach((li, i) => {
-                const threshold = condTitleThreshold + (i / leftItems.length) * 0.15;
+                const threshold = condTitleThreshold + (i / leftItems.length) * condItemsSpan;
                 li.classList.toggle('visible', condominioAttiva && p > threshold);
             });
-            if (p > condTitleThreshold + 0.17 && condominioAttiva) btnPrevCondominio.classList.add('visible'); 
+            const btnCondOffset = isStackedMobile ? btnCondOffsetMobile : 0.17;
+            if (p > condTitleThreshold + btnCondOffset && condominioAttiva) btnPrevCondominio.classList.add('visible'); 
             else btnPrevCondominio.classList.remove('visible');
 
             // FASE 2: COMPARSA INGEGNERIA
@@ -2884,15 +2894,17 @@
                 colIngegneria.style.opacity = ingegneriaAttiva ? 1 : 0;
                 colIngegneria.classList.remove('mobile-active');
             }
+            const ingItemsSpan = isStackedMobile ? ingItemsSpanMobile : 0.45;
             if (ingegneriaAttiva) {
                 rightItems.forEach((li, i) => {
-                    const threshold = ingStart + ((i / rightItems.length) * 0.45);
+                    const threshold = ingStart + ((i / rightItems.length) * ingItemsSpan);
                     li.classList.toggle('visible', p > threshold);
                 });
             } else {
                 rightItems.forEach(li => li.classList.remove('visible'));
             }
-            if (p > 0.85) btnPrevIngegneria.classList.add('visible'); 
+            const btnIngThreshold = isStackedMobile ? btnIngThresholdMobile : 0.85;
+            if (p > btnIngThreshold) btnPrevIngegneria.classList.add('visible'); 
             else btnPrevIngegneria.classList.remove('visible');
 
             // Indicatore di fase (solo mobile): mostra a che punto siamo
