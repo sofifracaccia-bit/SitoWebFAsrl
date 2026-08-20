@@ -727,6 +727,13 @@
             transform: translateY(-2px);
         }
 
+        /* Indicatore di fase (Condominio/Ingegneria) per lo scrollytelling
+           mobile dei Servizi: nascosto di default, attivato solo sotto i
+           992px. Non altera nulla della versione desktop. */
+        .servizi-phase-nav {
+            display: none;
+        }
+
         @media (max-width: 992px) {
             .servizi-intro {
                 padding: 40px 24px 20px;
@@ -746,48 +753,77 @@
             }
             .servizi-col {
                 position: absolute;
-                width: 100%;
-                max-width: 440px;
+                width: calc(100% - 48px);
+                max-width: 400px;
                 top: 50%;
                 left: 50%;
-                transform: translate(-50%, -50%);
-                padding: 30px 20px;
-                border-radius: 24px;
-                background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0) 78%);
+                opacity: 0;
+                pointer-events: none;
+                transform: translate(-50%, -50%) scale(0.92);
+                transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+                padding: 34px 26px;
+                border-radius: 26px;
+                background: rgba(255, 255, 255, 0.96);
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+                border: 1px solid rgba(11, 17, 32, 0.06);
+                box-shadow: 0 24px 60px rgba(11, 17, 32, 0.22);
+            }
+            .servizi-col.mobile-active {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translate(-50%, -50%) scale(1);
             }
             .servizi-col-left, .servizi-col-right {
                 text-align: center;
             }
-            .servizi-col-header .subtitle,
-            .servizi-col-header h3,
-            .servizi-list li {
-                text-shadow:
-                    0 0 6px #ffffff,
-                    0 0 12px #ffffff,
-                    0 0 20px #ffffff,
-                    0 0 34px #ffffff,
-                    0 0 55px #ffffff,
-                    0 0 80px rgba(255, 255, 255, 0.9),
-                    0 0 110px rgba(255, 255, 255, 0.8);
+            .servizi-col-header .subtitle {
+                display: inline-block;
+                padding: 5px 14px;
+                border-radius: 20px;
+                background: rgba(20, 23, 206, 0.08);
+                color: #1417ce;
             }
             .servizi-col-left .servizi-list, .servizi-col-right .servizi-list {
                 align-items: center;
             }
             .servizi-list li {
                 max-width: 100%;
-                padding: 0 !important;
+                width: 100%;
+                text-align: left;
+                padding: 0 0 0 22px !important;
             }
-            .servizi-list li::before {
-                display: none;
+            .servizi-col-left .servizi-list li::before,
+            .servizi-col-right .servizi-list li::before {
+                top: 8px;
+                left: 0;
+                right: auto;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #1417ce;
             }
-            .btn-preventivo {
-                box-shadow:
-                    0 0 10px #ffffff,
-                    0 0 20px #ffffff,
-                    0 0 36px #ffffff,
-                    0 0 60px #ffffff,
-                    0 0 90px rgba(255, 255, 255, 0.9),
-                    0 0 130px rgba(255, 255, 255, 0.75);
+            .servizi-phase-nav {
+                display: flex;
+                position: absolute;
+                left: 50%;
+                bottom: 30px;
+                transform: translateX(-50%);
+                z-index: 6;
+                gap: 10px;
+                pointer-events: none;
+            }
+            .phase-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: rgba(11, 17, 32, 0.18);
+                transition: background 0.4s ease, width 0.4s ease, border-radius 0.4s ease;
+            }
+            .phase-dot.active {
+                background: #1417ce;
+                width: 24px;
+                border-radius: 6px;
             }
         }
 
@@ -1663,7 +1699,8 @@
             }
 
             .servizi-col {
-                max-width: 100%;
+                max-width: 360px;
+                padding: 28px 22px;
             }
 
             .servizi-col-header h3 {
@@ -1693,6 +1730,14 @@
 
             .servizi-col-header h3 {
                 font-size: 21px;
+            }
+
+            .servizi-col {
+                padding: 24px 18px;
+            }
+
+            .servizi-phase-nav {
+                bottom: 22px;
             }
 
             .footer-left h2 {
@@ -1944,6 +1989,12 @@
                     <button class="btn-preventivo" id="btnPreventivoIngegneria" onclick="openModal('ingegneria')">Richiedi Preventivo</button>
                 </div>
 
+            </div>
+
+            <!-- Indicatore di fase, visibile solo su mobile (vedi CSS) -->
+            <div class="servizi-phase-nav" id="serviziPhaseNav" aria-hidden="true">
+                <span class="phase-dot" id="phaseDotCondominio"></span>
+                <span class="phase-dot" id="phaseDotIngegneria"></span>
             </div>
         </div>
 
@@ -2742,6 +2793,9 @@
         const btnPrevCondominio = document.getElementById('btnPreventivoCondominio');
         const btnPrevIngegneria = document.getElementById('btnPreventivoIngegneria');
 
+        const phaseDotCondominio = document.getElementById('phaseDotCondominio');
+        const phaseDotIngegneria = document.getElementById('phaseDotIngegneria');
+
         if (!sectionEl) return;
 
         if (introEl) {
@@ -2806,7 +2860,13 @@
             }
 
             const condominioAttiva = p > condTitleThreshold && !(isStackedMobile && p >= condEndMobile);
-            colCondominio.style.opacity = condominioAttiva ? 1 : 0;
+            if (isStackedMobile) {
+                colCondominio.style.opacity = '';
+                colCondominio.classList.toggle('mobile-active', condominioAttiva);
+            } else {
+                colCondominio.style.opacity = condominioAttiva ? 1 : 0;
+                colCondominio.classList.remove('mobile-active');
+            }
             leftItems.forEach((li, i) => {
                 const threshold = condTitleThreshold + (i / leftItems.length) * 0.15;
                 li.classList.toggle('visible', condominioAttiva && p > threshold);
@@ -2816,18 +2876,30 @@
 
             // FASE 2: COMPARSA INGEGNERIA
             const ingStart = isStackedMobile ? ingStartMobile : 0.35;
-            if (p >= ingStart) {
-                colIngegneria.style.opacity = 1;
+            const ingegneriaAttiva = p >= ingStart;
+            if (isStackedMobile) {
+                colIngegneria.style.opacity = '';
+                colIngegneria.classList.toggle('mobile-active', ingegneriaAttiva);
+            } else {
+                colIngegneria.style.opacity = ingegneriaAttiva ? 1 : 0;
+                colIngegneria.classList.remove('mobile-active');
+            }
+            if (ingegneriaAttiva) {
                 rightItems.forEach((li, i) => {
                     const threshold = ingStart + ((i / rightItems.length) * 0.45);
                     li.classList.toggle('visible', p > threshold);
                 });
             } else {
-                colIngegneria.style.opacity = 0;
                 rightItems.forEach(li => li.classList.remove('visible'));
             }
             if (p > 0.85) btnPrevIngegneria.classList.add('visible'); 
             else btnPrevIngegneria.classList.remove('visible');
+
+            // Indicatore di fase (solo mobile): mostra a che punto siamo
+            if (phaseDotCondominio && phaseDotIngegneria) {
+                phaseDotCondominio.classList.toggle('active', isStackedMobile && condominioAttiva);
+                phaseDotIngegneria.classList.toggle('active', isStackedMobile && ingegneriaAttiva);
+            }
         }
 
         window.addEventListener('scroll', computeProgressServizi, { passive: true });
