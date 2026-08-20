@@ -85,18 +85,11 @@
             box-sizing: border-box;
         }
 
-        html {
-            overflow-x: hidden;
-            max-width: 100%;
-        }
-
         body {
-            background-color: #ffffff; 
+            background-color: #1417ce; 
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             overflow-x: hidden;
-            max-width: 100%;
-            overscroll-behavior-x: none;
         }
 
         /* Classe per bloccare lo scroll del body quando la modale è aperta */
@@ -381,21 +374,6 @@
             text-align: center;
         }
 
-        /* Sfondo blu di #home come pseudo-elemento con z-index negativo,
-           cosi la sfumatura/vignette (che è un div fisso sopra il body)
-           torna a essere visibile invece di restare coperta dallo sfondo
-           blu solido della sezione. */
-        #home::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background-color: #1417ce;
-            z-index: -1;
-        }
-
         .hero-title-wrap {
             display: flex;
             flex-direction: column;
@@ -416,22 +394,6 @@
         #chi-siamo {
             justify-content: space-between;
             height: 115vh;
-            background-color: #1417ce;
-        }
-
-        /* Estende il blu di Chi Siamo dentro il gap (margin-top) prima del
-           box bianco di "I Nostri Servizi", cosi il lembo di blu che c'era
-           prima (quando lo sfondo default del sito era blu) resta identico,
-           senza toccare spaziature o layout della sezione. */
-        #chi-siamo::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -150px;
-            width: 100%;
-            height: 150px;
-            background-color: #1417ce;
-            pointer-events: none;
         }
 
         .about-content {
@@ -771,39 +733,45 @@
             }
             .servizi-3d {
                 height: 420vh;
-                margin-top: -50vh;
             }
             .building-scroll-track {
                 opacity: 0.95;
-                transition: transform 0.1s linear;
-                top: -110%;
             }
             .servizi-columns {
                 flex-direction: column;
                 justify-content: center;
                 gap: 0;
-                padding: 0;
+                padding: 0 24px;
                 height: 100vh;
             }
-            /* Le card non stanno più centrate sopra l'immagine: quando il
-               grattacielo scorre verso sinistra, il testo occupa lo spazio
-               libero a destra (poco più di metà larghezza schermo).
-               Testo semplice come su desktop, senza sfondo/alone. */
             .servizi-col {
                 position: absolute;
-                width: 58%;
-                max-width: 360px;
-                top: 25%;
-                left: auto;
-                right: 20px;
-                transform: translateY(-50%);
-                padding: 0;
+                width: 100%;
+                max-width: 440px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 30px 20px;
+                border-radius: 24px;
+                background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0) 78%);
             }
             .servizi-col-left, .servizi-col-right {
-                text-align: left;
+                text-align: center;
+            }
+            .servizi-col-header .subtitle,
+            .servizi-col-header h3,
+            .servizi-list li {
+                text-shadow:
+                    0 0 6px #ffffff,
+                    0 0 12px #ffffff,
+                    0 0 20px #ffffff,
+                    0 0 34px #ffffff,
+                    0 0 55px #ffffff,
+                    0 0 80px rgba(255, 255, 255, 0.9),
+                    0 0 110px rgba(255, 255, 255, 0.8);
             }
             .servizi-col-left .servizi-list, .servizi-col-right .servizi-list {
-                align-items: flex-start;
+                align-items: center;
             }
             .servizi-list li {
                 max-width: 100%;
@@ -811,6 +779,15 @@
             }
             .servizi-list li::before {
                 display: none;
+            }
+            .btn-preventivo {
+                box-shadow:
+                    0 0 10px #ffffff,
+                    0 0 20px #ffffff,
+                    0 0 36px #ffffff,
+                    0 0 60px #ffffff,
+                    0 0 90px rgba(255, 255, 255, 0.9),
+                    0 0 130px rgba(255, 255, 255, 0.75);
             }
         }
 
@@ -820,7 +797,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1;
+            z-index: 0;
             pointer-events: none;
             background: radial-gradient(ellipse at center, rgba(12,27,51,0) 25%, #081222 92%);
             transition: opacity 0.4s ease;
@@ -1647,24 +1624,10 @@
 
             .logo-inline {
                 height: clamp(120px, 20vw, 165px);
-                transform: translateY(-24px);
             }
 
-            /* Titolo hero: viewBox tornato a 300 (come desktop), spostato
-               in alto della stessa quantità del logo */
-            .hero-svg-title {
-                transform: translateY(-24px);
-            }
-
-            /* Decorazioni fogli/matita/compasso: via di mezzo tra la versione
-               originale (0.5, troppo piccola) e quella piena del desktop (1) */
-            .sheets-corner--left,
-            .sheets-corner--right {
-                transform: scale(0.75);
-            }
-
-            .sheets-corner--left { transform-origin: top left; }
-            .sheets-corner--right { transform-origin: top right; }
+            /* Decorazioni fogli/matita/compasso: stessa dimensione del desktop,
+               niente più scale(0.5) che le rimpiccioliva e nascondeva */
 
             /* --- Chi Siamo --- */
             #chi-siamo {
@@ -1673,14 +1636,6 @@
                 padding: 140px 22px 60px;
                 justify-content: center;
                 text-align: center;
-            }
-
-            /* Su mobile il gap prima di "I Nostri Servizi" è 65px (non
-               150px come sopra i 768px), quindi il lembo di blu va
-               ridotto di conseguenza */
-            #chi-siamo::after {
-                bottom: -65px;
-                height: 65px;
             }
 
             .about-content {
@@ -1692,12 +1647,10 @@
                 justify-content: center;
             }
 
-            /* --- Servizi: intro (via di mezzo tra blu originale (100px)
-               e il taglio netto di prima (40px): un po' di blu resta
-               visibile prima che inizi il bianco) --- */
+            /* --- Servizi: intro --- */
             .servizi-intro {
-                margin-top: 65px;
-                padding: 40px 22px 0;
+                margin-top: 100px;
+                padding: 90px 22px 0;
             }
 
             /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
@@ -2364,10 +2317,7 @@
             const sp = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
             const sp2 = Math.min(Math.max((window.scrollY - window.innerHeight) / window.innerHeight, 0), 1);
             
-            // L'ombra della home si dissolve durante il passaggio verso Chi
-            // Siamo, cosi da essere già sparita quando la sezione Chi Siamo
-            // è pienamente visibile (nessuna ombra residua al suo interno).
-            heroVignette.style.opacity = String(Math.max(0, 1 - sp * 1.3));
+            heroVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
             chiSiamoTags.classList.toggle('visible', sp > 0.55);
             menuBtnEl.style.opacity = sp > 0.5 ? '1' : '0';
             menuBtnEl.style.pointerEvents = sp > 0.5 ? 'auto' : 'none';
@@ -2542,38 +2492,23 @@
 
         const clock = new THREE.Clock(); const INTRO_DURATION = 1.8; const vFovRad = camera.fov * Math.PI / 180;
         function worldHalfWidth() { return (Math.tan(vFovRad / 2) * camera.position.z) * camera.aspect; }
-        function worldHalfHeight() { return Math.tan(vFovRad / 2) * camera.position.z; }
 
         const INTRO_Y = -0.55, CHI_SIAMO_Y = 1.0; const BASE_ROT_X = 0.16, BASE_ROT_Y = -0.14;
-
-        // --- Solo mobile: la planimetria parte dall'angolo in basso a
-        // sinistra, spuntando in obliquo invece che dritta da sinistra.
-        // Il desktop resta invariato (usa sempre INTRO_Y e rotZ 0).
-        const PLAN_MOBILE_BREAKPOINT = 768;
-        let isPlanMobile = window.innerWidth <= PLAN_MOBILE_BREAKPOINT;
-        const WORLD_HALF_HEIGHT = worldHalfHeight();
-        const MOBILE_INTRO_Y = -WORLD_HALF_HEIGHT * 0.86;
-        const MOBILE_INTRO_ROT_Z = 0.42; // inclinazione obliqua iniziale (radianti)
-        const MOBILE_INTRO_X_FACTOR = 0.85; // quanto resta "spuntato" dall'angolo
-
         let currentRoll = 1, currentX = 0, currentY = INTRO_Y, currentRotZ = 0, initialized = false;
 
         function animate() {
             requestAnimationFrame(animate);
-            const halfW = worldHalfWidth(), chiSiamoX = halfW * 0.72;
-            const introX = isPlanMobile ? -halfW * MOBILE_INTRO_X_FACTOR : -halfW * 0.72;
-            const introY = isPlanMobile ? MOBILE_INTRO_Y : INTRO_Y;
-            const introRotZ = isPlanMobile ? MOBILE_INTRO_ROT_Z : 0;
-            if (!initialized) { currentX = introX; currentY = introY; currentRotZ = introRotZ; initialized = true; }
+            const halfW = worldHalfWidth(), introX = -halfW * 0.72, chiSiamoX = halfW * 0.72;
+            if (!initialized) { currentX = introX; initialized = true; }
             const elapsedTime = clock.getElapsedTime(), introT = Math.min(elapsedTime / INTRO_DURATION, 1), introEase = easeOutCubic(introT);
             let targetRoll, targetX, targetY, targetRotZ;
 
-            if (introT < 1) { targetRoll = 1 - introEase; targetX = introX; targetY = introY; targetRotZ = introRotZ; } 
+            if (introT < 1) { targetRoll = 1 - introEase; targetX = introX; targetY = INTRO_Y; targetRotZ = 0; } 
             else {
                 const unrolled = scrollUnrolled(scrollProgress); targetRoll = 1 - unrolled;
                 const half = easeInOutCubic(Math.max(0, Math.min((scrollProgress - MOVE_START) / (MOVE_END - MOVE_START), 1)));
-                targetX = THREE.MathUtils.lerp(introX, chiSiamoX, half); targetY = THREE.MathUtils.lerp(introY, CHI_SIAMO_Y, half);
-                const rotTrigger = Math.max(0, Math.min((scrollProgress - MOVE_START) / (1 - MOVE_START), 1)); targetRotZ = introRotZ + easeOutCubic(rotTrigger) * Math.PI * 1.65;
+                targetX = THREE.MathUtils.lerp(introX, chiSiamoX, half); targetY = THREE.MathUtils.lerp(INTRO_Y, CHI_SIAMO_Y, half);
+                const rotTrigger = Math.max(0, Math.min((scrollProgress - MOVE_START) / (1 - MOVE_START), 1)); targetRotZ = easeOutCubic(rotTrigger) * Math.PI * 1.65;
             }
 
             const slideSp2 = window.planSlideSp2 || 0;
@@ -2586,7 +2521,7 @@
             contactShadow.material.opacity = 0.55 + (1 - currentRoll) * 0.15; renderer.render(scene, camera);
         }
         animate();
-        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); isPlanMobile = window.innerWidth <= PLAN_MOBILE_BREAKPOINT; });
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
     </script>
 
     <script>
@@ -2867,7 +2802,7 @@
             }
 
             if (buildingTrack) {
-                buildingTrack.style.transform = `translate(calc(-50% + ${translateXPercent}%), ${translateVh}vh) scale(${scale})`;
+                buildingTrack.style.transform = `translate(-50%, ${translateVh}vh) scale(${scale})`;
             }
 
             const condominioAttiva = p > condTitleThreshold && !(isStackedMobile && p >= condEndMobile);
