@@ -544,6 +544,13 @@
             overflow: visible;
         }
 
+        /* Regola valida SOLO per schermi piccoli (mobile) */
+        @media (max-width: 768px) {
+            .skyscraper-img {
+                margin-top: 700px; /* Aumenta o diminuisci questo valore per abbassare il grattacielo */
+            }
+        }
+
         /* Container Grattacielo PNG */
         .building-png-container {
             position: absolute;
@@ -742,6 +749,7 @@
             }
             .servizi-3d {
                 height: 420vh;
+                display: block;
             }
             .building-scroll-track {
                 opacity: 0.95;
