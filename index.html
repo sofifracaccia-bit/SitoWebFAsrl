@@ -2530,7 +2530,24 @@
         function worldHalfWidth() { return (Math.tan(vFovRad / 2) * camera.position.z) * camera.aspect; }
 
         const INTRO_Y = -0.55, CHI_SIAMO_Y = 1.0; const BASE_ROT_X = 0.16, BASE_ROT_Y = -0.14;
-        let currentRoll = 1, currentX = 0, currentY = INTRO_Y, currentRotZ = 0, initialized = false;
+        // Solo su mobile: quando la planimetria si riapre in "Chi Siamo" deve
+        // fermarsi più in basso rispetto al desktop, per non coprire il testo
+        // centrato. Non tocca in alcun modo il valore/percorso desktop sopra.
+        const CHI_SIAMO_Y_MOBILE = -0.35;
+        // Solo su mobile: inclinazione extra applicata alla planimetria in
+        // modo che spunti obliqua dall'angolo, invece che dritta/orizzontale
+        // come accadeva prima. Non tocca la rotazione desktop.
+        const MOBILE_TILT_Z = -0.4;
+        // Solo su mobile: posizione Y iniziale (intro) 300px più in basso
+        // rispetto al desktop (INTRO_Y), convertiti in unità 3D in base
+        // all'attuale camera/viewport. Non tocca il valore desktop.
+        function pxToWorldUnitsY(px) {
+            const worldHalfHeight = Math.tan(vFovRad / 2) * camera.position.z;
+            return px * (2 * worldHalfHeight) / window.innerHeight;
+        }
+        function getIntroYMobile() { return INTRO_Y - pxToWorldUnitsY(300); }
+        let isMobileView = window.innerWidth <= 768;
+        let currentRoll = 1, currentX = 0, currentY = (isMobileView ? getIntroYMobile() : INTRO_Y), currentRotZ = 0, initialized = false;
 
         function animate() {
             requestAnimationFrame(animate);
@@ -2539,11 +2556,13 @@
             const elapsedTime = clock.getElapsedTime(), introT = Math.min(elapsedTime / INTRO_DURATION, 1), introEase = easeOutCubic(introT);
             let targetRoll, targetX, targetY, targetRotZ;
 
-            if (introT < 1) { targetRoll = 1 - introEase; targetX = introX; targetY = INTRO_Y; targetRotZ = 0; } 
+            if (introT < 1) { targetRoll = 1 - introEase; targetX = introX; targetY = (isMobileView ? getIntroYMobile() : INTRO_Y); targetRotZ = 0; } 
             else {
                 const unrolled = scrollUnrolled(scrollProgress); targetRoll = 1 - unrolled;
                 const half = easeInOutCubic(Math.max(0, Math.min((scrollProgress - MOVE_START) / (MOVE_END - MOVE_START), 1)));
-                targetX = THREE.MathUtils.lerp(introX, chiSiamoX, half); targetY = THREE.MathUtils.lerp(INTRO_Y, CHI_SIAMO_Y, half);
+                const chiSiamoYTarget = isMobileView ? CHI_SIAMO_Y_MOBILE : CHI_SIAMO_Y;
+                const introYStart = isMobileView ? getIntroYMobile() : INTRO_Y;
+                targetX = THREE.MathUtils.lerp(introX, chiSiamoX, half); targetY = THREE.MathUtils.lerp(introYStart, chiSiamoYTarget, half);
                 const rotTrigger = Math.max(0, Math.min((scrollProgress - MOVE_START) / (1 - MOVE_START), 1)); targetRotZ = easeOutCubic(rotTrigger) * Math.PI * 1.65;
             }
 
@@ -2553,11 +2572,11 @@
             currentY += (targetY - currentY) * 0.1; currentRotZ += (targetRotZ - currentRotZ) * 0.095;
 
             updatePlanRoll(currentRoll); planGroup.position.set(currentX, currentY, 0);
-            planGroup.rotation.x = BASE_ROT_X + Math.sin(elapsedTime * 0.35) * 0.02; planGroup.rotation.y = BASE_ROT_Y + Math.sin(elapsedTime * 0.28) * 0.025; planGroup.rotation.z = -currentRotZ; 
+            planGroup.rotation.x = BASE_ROT_X + Math.sin(elapsedTime * 0.35) * 0.02; planGroup.rotation.y = BASE_ROT_Y + Math.sin(elapsedTime * 0.28) * 0.025; planGroup.rotation.z = -currentRotZ + (isMobileView ? MOBILE_TILT_Z : 0); 
             contactShadow.material.opacity = 0.55 + (1 - currentRoll) * 0.15; renderer.render(scene, camera);
         }
         animate();
-        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); isMobileView = window.innerWidth <= 768; });
     </script>
 
     <script>
