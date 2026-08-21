@@ -2583,7 +2583,8 @@
             const sec = document.getElementById('servizi3d');
             if (sec) {
                 const totalScrollable = sec.offsetHeight - window.innerHeight;
-                window.scrollTo({ top: sec.offsetTop + (totalScrollable * 0.29), behavior: 'smooth' });
+                const mobileExtraOffset = window.innerWidth <= 768 ? 260 : 0;
+                window.scrollTo({ top: sec.offsetTop + (totalScrollable * 0.29) + mobileExtraOffset, behavior: 'smooth' });
             }
         });
 
@@ -2592,7 +2593,8 @@
             const sec = document.getElementById('servizi3d');
             if (sec) {
                 const totalScrollable = sec.offsetHeight - window.innerHeight;
-                window.scrollTo({ top: sec.offsetTop + (totalScrollable * 0.87), behavior: 'smooth' });
+                const mobileExtraOffset = window.innerWidth <= 768 ? 140 : 0;
+                window.scrollTo({ top: sec.offsetTop + (totalScrollable * 0.87) + mobileExtraOffset, behavior: 'smooth' });
             }
         });
 
