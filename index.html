@@ -1585,6 +1585,13 @@
         ========================================================= */
         @media (max-width: 768px) {
 
+            /* --- Blocco scroll orizzontale (asse X) --- */
+            body {
+                overflow-x: hidden;
+                max-width: 100vw;
+                touch-action: pan-y;
+            }
+
             /* --- Header / Menu --- */
             header {
                 height: 90px;
