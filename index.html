@@ -551,6 +551,15 @@
             }
         }
 
+        @media (max-width: 768px) {
+            /* Si attiva solo quando la sezione diventa attiva */
+            #chi-siamo.active .planimetria-container,
+            #chi-siamo.in-view canvas {
+                transform: translateX(50px);
+                transition: transform 0.5s ease; /* Transizione fluida */
+            }
+        }
+
         /* Container Grattacielo PNG */
         .building-png-container {
             position: absolute;
