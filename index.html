@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>F.A. SRL - Ingegneria & Condomini</title>
 
+    <!-- Importazione font Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
     <!-- Importazione di Three.js per il 3D reale -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
@@ -86,13 +91,13 @@
         }
 
         html {
-            background-color: #1a2751;
+            background-color: #141c38;
             width: 100%;
             overscroll-behavior-x: none;
         }
 
         body {
-            background-color: #0c0d5f; 
+            background-color: #1a2751; 
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             overflow-x: hidden;
@@ -343,7 +348,7 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, #1417ce 0%, #0c2049 100%);
+            background: linear-gradient(90deg, #1417ce 0%, #1a2751 100%);
             border-radius: 2px;
             transform: scaleX(0);
             transform-origin: right;
@@ -412,9 +417,10 @@
 
         .about-content h2 {
             font-size: clamp(20px, 2.6vw, 40px);
-            font-weight: 800;
+            font-weight: 400;
             line-height: 1.2;
-            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: none;
         }
 
         .about-content h2 span {
@@ -739,7 +745,7 @@
         }
 
         .btn-preventivo:hover {
-            background: #0c1b33;
+            background: #1a2751;
             transform: translateY(-2px);
         }
 
@@ -952,7 +958,7 @@
             position: relative;
             width: 100vw;
             min-height: 150vh;
-            background-color: #0c2049;
+            background-color: #1a2751;
             color: #ffffff;
             display: flex;
             flex-direction: column;
@@ -1553,7 +1559,7 @@
         }
 
         .form-group-checkbox label a:hover {
-            color: #0c2049;
+            color: #1a2751;
         }
 
         .btn-submit {
@@ -1572,7 +1578,7 @@
         }
 
         .btn-submit:hover {
-            background: #0c1b33;
+            background: #1a2751;
             transform: translateY(-2px);
         }
 
@@ -1657,9 +1663,6 @@
                 height: clamp(120px, 20vw, 165px);
             }
 
-            /* Decorazioni fogli/matita/compasso: stessa dimensione del desktop,
-               niente più scale(0.5) che le rimpiccioliva e nascondeva */
-
             /* --- Chi Siamo --- */
             #chi-siamo {
                 height: auto;
@@ -1684,11 +1687,8 @@
                 padding: 90px 22px 0;
             }
 
-            /* --- Servizi: le due colonne (Condominio / Ingegneria) ---
-               Restano una sopra l'altra al centro (come già previsto dalla
-               regola a 992px), qui affiniamo solo le misure per schermi
-               stretti. L'alternanza "una branca alla volta" è gestita
-               dallo script più sotto. */
+            /* --- Servizi: le due colonne (Condominio / Ingegneria) --- */
+        
             .servizi-columns {
                 padding: 0 18px;
             }
@@ -1899,10 +1899,10 @@
         <div class="hero-title-wrap">
             <img src="logobianco.png" alt="F.A. SRL Logo" class="logo-inline">
             <svg class="hero-svg-title" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
-                <text x="450" y="90" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">AMMINISTRAZIONI</text>
-                <text x="450" y="181" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="104" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">CONDOMINIALI</text>
+                <text x="450" y="90" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif">AMMINISTRAZIONI</text>
+                <text x="450" y="181" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="104" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif">CONDOMINIALI</text>
                 <rect x="25" y="195" width="850" height="4" fill="#ffffff" rx="2" />
-                <text x="450" y="270" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">SERVIZI DI INGEGNERIA</text>
+                <text x="450" y="270" text-anchor="middle" textLength="850" lengthAdjust="spacing" font-size="72" font-weight="900" fill="#ffffff" text-transform="uppercase" font-family="Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif">SERVIZI DI INGEGNERIA</text>
             </svg>
         </div>
     </section>
@@ -2341,6 +2341,7 @@
         const scrollIndicator = document.getElementById('scrollIndicator');
         const heroVignette = document.getElementById('heroVignette');
         const chiSiamoTags = document.getElementById('chiSiamoTags');
+        const chiSiamoSectionEl = document.getElementById('chi-siamo');
         const menuBtnEl = document.querySelector('.menu-btn');
         const serviziIntroEl = document.getElementById('servizi');
         const servizi3dEl = document.getElementById('servizi3d');
@@ -2353,7 +2354,15 @@
             const sp = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
             const sp2 = Math.min(Math.max((window.scrollY - window.innerHeight) / window.innerHeight, 0), 1);
             
-            heroVignette.style.opacity = String(Math.max(0, 1 - sp * 1.6));
+            let vignetteOpacity = 1;
+            if (chiSiamoSectionEl) {
+                const chiSiamoRect = chiSiamoSectionEl.getBoundingClientRect();
+                if (chiSiamoRect.bottom <= window.innerHeight) {
+                    const fadeProgress = Math.min(Math.max((window.innerHeight - chiSiamoRect.bottom) / window.innerHeight, 0), 1);
+                    vignetteOpacity = Math.max(0, 1 - fadeProgress * 1.6);
+                }
+            }
+            heroVignette.style.opacity = String(vignetteOpacity);
             chiSiamoTags.classList.toggle('visible', sp > 0.55);
             menuBtnEl.style.opacity = sp > 0.5 ? '1' : '0';
             menuBtnEl.style.pointerEvents = sp > 0.5 ? 'auto' : 'none';
@@ -2960,7 +2969,7 @@
     // --- VARIABILI DA CONFIGURARE ---
     const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz73LGBqTqhC4Q6uGidW0Ob6cP11aE_mUdGd13cnpu9-mBhGEIZW7PaICcHn6Gf7I4t/exec";
     
-    // Configurazione EmailJS (usa i tuoi Service ID e Template ID)
+    // Configurazione EmailJS 
     const EMAILJS_SERVICE_ID = "service_2qzsjo5";
     const EMAILJS_TEMPLATE_ID_CONDOMINIO = "template_82jqe2g";
     const EMAILJS_TEMPLATE_ID_INGEGNERIA = "template_a9yato7";
